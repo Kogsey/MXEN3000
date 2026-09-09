@@ -52,7 +52,7 @@
 			// 
 			this.getIOtimer.Enabled = true;
 			this.getIOtimer.Interval = 10;
-			this.getIOtimer.Tick += new System.EventHandler(this.getIOtimer_Tick);
+			this.getIOtimer.Tick += new System.EventHandler(this.GetIOtimer_Tick);
 			// 
 			// InputBox1
 			// 
@@ -91,7 +91,7 @@
 			this.Send1.Name = "Send1";
 			this.Send1.Size = new System.Drawing.Size(75, 23);
 			this.Send1.TabIndex = 4;
-			this.Send1.Text = "Output 1";
+			this.Send1.Text = "Voltage";
 			this.Send1.UseVisualStyleBackColor = true;
 			this.Send1.Click += new System.EventHandler(this.Send1_Click);
 			// 
@@ -101,7 +101,7 @@
 			this.Send2.Name = "Send2";
 			this.Send2.Size = new System.Drawing.Size(75, 23);
 			this.Send2.TabIndex = 4;
-			this.Send2.Text = "Output 2";
+			this.Send2.Text = "Duty Cycle";
 			this.Send2.UseVisualStyleBackColor = true;
 			this.Send2.Click += new System.EventHandler(this.Send2_Click);
 			// 
@@ -142,12 +142,8 @@
 			// 
 			// OutputBox2
 			// 
+			this.OutputBox2.DecimalPlaces = 1;
 			this.OutputBox2.Location = new System.Drawing.Point(40, 68);
-			this.OutputBox2.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
 			this.OutputBox2.Name = "OutputBox2";
 			this.OutputBox2.Size = new System.Drawing.Size(125, 20);
 			this.OutputBox2.TabIndex = 3;

@@ -52,7 +52,7 @@ namespace SerialGUISample
 		}
 
 		// Send a four byte message to the Arduino via serial.
-		private void sendIO(byte PORT, byte DATA)
+		private void SendIO(byte PORT, byte DATA)
 		{
 			Outputs[0] = START;    //Set the first byte to the start value that indicates the beginning of the message.
 			Outputs[1] = PORT;     //Set the second byte to represent the port where, Input 1 = 0, Input 2 = 1, Output 1 = 2 & Output 2 = 3. This could be enumerated to make writing code simpler... (see Arduino driver)
@@ -87,47 +87,54 @@ namespace SerialGUISample
 
 		private const bool secondMethod = true;
 
+		/// <summary> Voltage </summary>
+		/// <param name="sender"> </param>
+		/// <param name="e"> </param>
 		private void Send1_Click(object sender, EventArgs e) //Press the button to send the value to Output 1, Arduino Port A.
 		{
-			// Here we map the -15 to 15 range to a 0-255 range for the DAC
 			double voltage = (double)OutputBox1.Value;
 			Console.WriteLine("Votlage: {0}", voltage);
-			voltage = Clamp(voltage, -15f, 15f);
+			voltage = Clamp(voltage, -15f, 15f); // clamp voltage
 			Console.WriteLine("Clamped: {0}", voltage);
-			byte byteVal;
-			if (!secondMethod)
-			{
-				double lerpVal = (voltage + 15) / 30;
-				Console.WriteLine("Lerped: {0}", lerpVal);
-				byteVal = (byte)Lerp(lerpVal, 0, 255);
-			}
-			else
-			{
-				byteVal = (byte)(128 * (voltage / Vref + 255.0 / 256.0));
-			}
-			Console.WriteLine("Byte: {0}", byteVal);
-			byte reversed = ReverseBitsWith4Operations(byteVal);
-			Console.WriteLine("Reversed Byte: {0}", reversed);
-
-			sendIO(2, reversed); // The value 2 indicates Output1, value for output set in OutputBox1.
+			double dutyVal = (voltage + 15) / 30; // Convert to 01 duty value
+			SendDuty01(dutyVal);
 		}
 
+		private void SendDuty01(double dutyCycle)
+		{
+			Console.WriteLine("Duty: {0}%", dutyCycle * 100);
+			dutyCycle = Clamp(dutyCycle, 0.0, 1.0); // clamp
+			byte byteVal = (byte)Lerp(dutyCycle, 0, 255); // Convert to byte
+			Console.WriteLine("Byte: {0}", byteVal);
+			byte reversed = ReverseBitsWith4Operations(byteVal); // Reverse to fix wiring problems
+			Console.WriteLine("Reversed Byte: {0}", reversed);
+
+			SendIO(2, (byte)OutputBox2.Value);
+		}
+
+		/// <summary> Duty Cycle </summary>
+		/// <param name="sender"> </param>
+		/// <param name="e"> </param>
 		private void Send2_Click(object sender, EventArgs e) //Press the button to send the value to Output 2, Arduino Port C.
 		{
-			sendIO(3, (byte)OutputBox2.Value); // The value 3 indicates Output2, value for output set in OutputBox1.
+			double duty = (double)OutputBox1.Value;
+			double duty01 = duty / 100;
+			SendDuty01(duty01);
+
+			SendIO(3, (byte)OutputBox2.Value); // The value 3 indicates Output2, value for output set in OutputBox1.
 		}
 
 		private void Get1_Click(object sender, EventArgs e) //Press the button to request value from Input 1, Arduino Port F.
 		{
-			sendIO(0, ZERO);  // The value 0 indicates Input 1, ZERO just maintains a fixed value for the discarded data in order to maintain a consistent package format.
+			SendIO(0, ZERO);  // The value 0 indicates Input 1, ZERO just maintains a fixed value for the discarded data in order to maintain a consistent package format.
 		}
 
 		private void Get2_Click(object sender, EventArgs e) //Press the button to request value from Input 1, Arduino Port K.
 		{
-			sendIO(1, ZERO);  // The value 1 indicates Input 2, ZERO maintains a consistent value for the message output.
+			SendIO(1, ZERO);  // The value 1 indicates Input 2, ZERO maintains a consistent value for the message output.
 		}
 
-		private void getIOtimer_Tick(object sender, EventArgs e) //It is best to continuously check for incoming data as handling the buffer or waiting for event is not practical in C#.
+		private void GetIOtimer_Tick(object sender, EventArgs e) //It is best to continuously check for incoming data as handling the buffer or waiting for event is not practical in C#.
 		{
 			if (serial.IsOpen) //Check that a serial connection exists.
 			{
