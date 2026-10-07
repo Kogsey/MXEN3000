@@ -1,10 +1,10 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SerialGUISample
+namespace SerialGUISample.Hardware
 {
 	internal enum AutoMeasureState
 	{
@@ -26,7 +26,7 @@ namespace SerialGUISample
 			this.log = log;
 		}
 
-		public void TickMeasure(ControlUtil controlUtil)
+		public void TickMeasure(SerialUtil controlUtil)
 		{
 			switch (measureState)
 			{
@@ -37,8 +37,8 @@ namespace SerialGUISample
 					if (waitTimer >= changeWaitCount)
 					{
 						byte currentSendByte = sendBytes[currentByte];
-						currentSendByte = MathUtils.ReverseBitsWith4Operations(currentSendByte);
-						controlUtil.SendIO(sendPort, currentSendByte);
+						currentSendByte = MathUtils.ReverseBits(currentSendByte);
+						controlUtil.Send(sendIndex, currentSendByte);
 						waitTimer = 0;
 						measureState = AutoMeasureState.AwaitingMeasureRequest;
 					}
@@ -51,7 +51,7 @@ namespace SerialGUISample
 				case AutoMeasureState.AwaitingMeasureRequest:
 					if (waitTimer >= requestWaitCount)
 					{
-						controlUtil.RequestSerialRecieve(recievePort);
+						controlUtil.RequestRead(readIndex);
 						waitTimer = 0;
 						measureState = AutoMeasureState.AwaitingMeasure;
 					}
@@ -72,7 +72,7 @@ namespace SerialGUISample
 						}
 						else
 						{
-							log(LogLevel.REQUESTED, "{0}, {1},", sendBytes[currentByte], controlUtil.GetRecieved(recievePort));
+							log(LogLevel.REQUESTED, "{0}, {1},", sendBytes[currentByte], controlUtil.GetRecieved(readIndex));
 							measureState = AutoMeasureState.AwaitingChange;
 						}
 					}
@@ -89,16 +89,16 @@ namespace SerialGUISample
 		private int currentByte;
 
 		private int waitTimer = 0;
-		private byte sendPort;
-		private byte recievePort;
+		private byte sendIndex;
+		private byte readIndex;
 
 		public void RunAutoMeasure(IEnumerable<byte> sendBytesEnumerable, byte sendPort, byte recievePort)
 		{
 			sendBytes = sendBytesEnumerable.ToArray();
 			measureState = AutoMeasureState.AwaitingChange;
 			waitTimer = 0;
-			this.sendPort = sendPort;
-			this.recievePort = recievePort;
+			this.sendIndex = sendPort;
+			this.readIndex = recievePort;
 		}
 	}
-}
+}*/

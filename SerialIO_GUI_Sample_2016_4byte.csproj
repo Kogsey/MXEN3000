@@ -55,10 +55,14 @@
     <Compile Include="BasicGUI.Designer.cs">
       <DependentUpon>BasicGUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="ControlUtil.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="Hardware\Sensor.cs" />
+    <Compile Include="Hardware\BoardComms.cs" />
+    <Compile Include="LineFollowController.cs" />
+    <Compile Include="PIDUtil.cs" />
     <Compile Include="OtherUtils.cs" />
     <Compile Include="MathUtils.cs" />
-    <Compile Include="MeasurementUtil.cs" />
+    <Compile Include="Hardware\MeasurementUtil.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="BasicGUI.resx">

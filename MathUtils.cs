@@ -48,7 +48,22 @@ namespace SerialGUISample
 		public static double AmpVoltToByte(double voltage)
 			=> MathUtils.RangeMap(voltage, 0, 15.0, 0, 255.0);
 
-		public static byte ReverseBitsWith4Operations(byte b)
+		/// <summary> I stole this off the internet. I don't know how it works and i don't want to. Quake 3 ah code. </summary>
+		/// <param name="b"> The byte to reverse. </param>
+		/// <returns> Returns the bits in the byte reversed. </returns>
+		public static byte ReverseBits(byte b)
 			=> (byte)(((b * 0x80200802ul) & 0x0884422110ul) * 0x0101010101ul >> 32);
+
+		public static int GetIndex<T>(this IEnumerable<T> enumerable, T find) where T : IEquatable<T>
+		{
+			int index = 0;
+			foreach (T item in enumerable)
+			{
+				if (item.Equals(find))
+					return index;
+				index++;
+			}
+			return -1;
+		}
 	}
 }

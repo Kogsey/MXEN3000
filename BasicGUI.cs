@@ -1,7 +1,7 @@
 ﻿// Curtin University Mechatronics Engineering Serial I/O Card - Sample GUI Code
 
+using SerialGUISample.Hardware;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace SerialGUISample
@@ -10,16 +10,20 @@ namespace SerialGUISample
 	{
 		private const LogLevel LOG_LEVEL = LogLevel.VERBOSE;
 
-		private readonly ControlUtil controlUtil;
-		private readonly MeasurementUtil measurementUtil;
+		private readonly BoardComms commsUtil;
+		private readonly Controller controller;
+		//private readonly MeasurementUtil measurementUtil;
 
 		public Form1()
 		{
 			// Initialize required for form controls.
 			InitializeComponent();
 
-			controlUtil = new ControlUtil(true, serial, Log);
-			measurementUtil = new MeasurementUtil(Log);
+			commsUtil = new BoardComms(true, serial, Log);
+			commsUtil.OnSerialRead += UpdateBoxes;
+
+			//measurementUtil = new MeasurementUtil(Log);
+			controller = new LineFollowController(commsUtil, Log);
 		}
 
 		private void Log(LogLevel level, string msg, params object[] arg)
@@ -40,7 +44,7 @@ namespace SerialGUISample
 		/// <param name="e"> </param>
 		private void Send1_Click(object sender, EventArgs e) //Press the button to send the value to Output 1, Arduino Port A.
 		{
-			controlUtil.SendDutyFactor(ControlUtil.PORT_SEND1, (double)(BoxSendDuty1.Value / 100));
+			commsUtil.SendDutyFactor(0, (double)(BoxSendDuty1.Value / 100));
 		}
 
 		/// <summary> Duty Cycle </summary>
@@ -48,54 +52,49 @@ namespace SerialGUISample
 		/// <param name="e"> </param>
 		private void Send2_Click(object sender, EventArgs e) //Press the button to send the value to Output 2, Arduino Port C.
 		{
-			controlUtil.SendDutyFactor(ControlUtil.PORT_SEND2, (double)(BoxSendDuty2.Value / 100));
+			commsUtil.SendDutyFactor(0, (double)(BoxSendDuty2.Value / 100));
 		}
 
 		private void Get1_Click(object sender, EventArgs e) //Press the button to request value from Input 1, Arduino Port F.
 		{
-			controlUtil.RequestSerialRecieve(ControlUtil.PORT_RECIEVE1);  // The value 0 indicates Input 1, ZERO just maintains a fixed value for the discarded data in order to maintain a consistent package format.
+			//commsUtil.RequestSerialRecieve(commsUtil.PortRecieve1);  // The value 0 indicates Input 1, ZERO just maintains a fixed value for the discarded data in order to maintain a consistent package format.
 		}
 
 		private void Get2_Click(object sender, EventArgs e) //Press the button to request value from Input 1, Arduino Port K.
 		{
-			controlUtil.RequestSerialRecieve(ControlUtil.PORT_RECIEVE2);  // The value 1 indicates Input 2, ZERO maintains a consistent value for the message output.
+			//commsUtil.RequestSerialRecieve(commsUtil.PortRecieve2);  // The value 1 indicates Input 2, ZERO maintains a consistent value for the message output.
 		}
 
 		#endregion IO
 
-		private void GetIOtimer_Tick(object sender, EventArgs e) //It is best to continuously check for incoming data as handling the buffer or waiting for event is not practical in C#.
+		private void UpdateBoxes(byte readIndex, byte readByte)
 		{
-			(byte port, byte result)? pair = controlUtil.SerialRecieve();
-			if (pair.HasValue)
+			TextBox box = null;
+			if (readIndex == 0)
+				box = InputBox1;
+			if (readIndex == 1)
+				box = InputBox2;
+
+			if (box != null)
 			{
-				(byte readPort, byte readByte) = pair.Value;
-				TextBox box = null;
-				switch (readPort)
-				{
-					case ControlUtil.PORT_RECIEVE1:
-						box = InputBox1;
-						break;
-
-					case ControlUtil.PORT_RECIEVE2:
-						box = InputBox2;
-						break;
-				}
-
-				if (box != null)
-				{
-					string msg = string.Format("Read Byte: {0}", readByte);
-					box.Text = msg;
-					Log(LogLevel.VERBOSE, msg);
-				}
-				else
-				{
-					Log(LogLevel.WARN, "Invalid recieve port read from serial: {0}.", readPort);
-				}
+				string msg = string.Format("Read Byte: {0}", readByte);
+				box.Text = msg;
+				Log(LogLevel.VERBOSE, msg);
 			}
-			measurementUtil.TickMeasure(controlUtil);
+			else
+			{
+				Log(LogLevel.WARN, "Invalid recieve port read from serial: {0}.", readIndex);
+			}
 		}
 
-		private IEnumerable<byte> SendBytesGen
+		/// <summary> While it is in fact practical to handle the buffer or waiting for events in versions of C# that aren't over a decade old we're not on one of those for some reason. </summary>
+		/// <param name="sender"> </param>
+		/// <param name="e"> </param>
+		private void GetIOtimer_Tick(object sender, EventArgs e)
+		{
+		}
+
+		/*private IEnumerable<byte> SendBytesGen
 		{
 			get
 			{
@@ -104,11 +103,11 @@ namespace SerialGUISample
 					yield return (byte)MathUtils.AmpVoltToByte(volt);
 				}
 			}
-		}
+		}*/
 
 		private void AutoMeasureButton_Click(object sender, EventArgs e)
 		{
-			measurementUtil.RunAutoMeasure(SendBytesGen, ControlUtil.PORT_SEND1, ControlUtil.PORT_RECIEVE1);
+			//measurementUtil.RunAutoMeasure(SendBytesGen, commsUtil.SendPorts[0], commsUtil.ReadPorts[0]);
 		}
 	}
 }
