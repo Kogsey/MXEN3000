@@ -1,4 +1,5 @@
 ﻿using SerialGUISample.Hardware;
+using System;
 
 namespace SerialGUISample
 {
@@ -17,7 +18,7 @@ namespace SerialGUISample
 
 		#region Actual Control
 
-		public double DirectionToDuty(double direction)
+		public virtual double DirectionToDuty(double direction)
 		{
 			double duty = MathUtils.RangeMap(direction, -1.0, 1.0, 0.0, 1.0);
 			return MathUtils.Clamp(duty, 0.0, 1.0);
@@ -27,14 +28,21 @@ namespace SerialGUISample
 		{
 			if (!ControlLockout)
 			{
+				Log(LogLevel.VERBOSE, "Passed direction to: {0} with value {1}", sendIndex, direction);
 				double duty = DirectionToDuty(direction);
 				CommsUtil.SendDutyFactor(sendIndex, duty);
+				OnTreadSpeedChanged(sendIndex, direction);
 			}
 			else
 			{
-				Log(LogLevel.REQUESTED, "Controls locked. Ignoring command to send {direction} to index {0}", direction, sendIndex);
+				Log(LogLevel.REQUESTED, "Controls locked. Ignoring command to send {0} to index {1}", direction, sendIndex);
 			}
 		}
+
+		public event Action<byte, double> OnTreadSpeedChanged = delegate
+		{ };
+		public event Action<byte, byte> OnSensorReadChanged = delegate
+		{ };
 
 		/// <summary> Controls the motor for the left tread. </summary>
 		/// <param name="direction"> A value between -1.0 and 1.0. -1.0 is backwards 1.0 is forwards. </param>

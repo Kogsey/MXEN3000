@@ -6,26 +6,26 @@ using System.Threading.Tasks;
 
 namespace SerialGUISample
 {
-	internal class PIDUtil
+	public class PIDUtil
 	{
 		public float P { get; private set; }
 		public float I { get; private set; }
 		public float D { get; private set; }
 
-		public float Kp { get; private set; }
-		public float Ki { get; private set; }
-		public float Kd { get; private set; }
+		public float Kp { get; set; }
+		public float Ki { get; set; }
+		public float Kd { get; set; }
 
 		private float LastError { get; set; }
 
-		public float UpdatePID(float error, float lastError)
+		public float CalcPID(float error)
 		{
 			P = error;
 			I = I + error;
-			D = error - lastError;
+			D = error - LastError;
 
 			float result = Kp * P + Ki * I + Kd * D;
-			LastError = lastError;
+			LastError = error;
 			return result;
 		}
 	}

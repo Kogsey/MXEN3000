@@ -2,6 +2,7 @@
 
 using SerialGUISample.Hardware;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace SerialGUISample
@@ -11,7 +12,7 @@ namespace SerialGUISample
 		private const LogLevel LOG_LEVEL = LogLevel.VERBOSE;
 
 		private readonly BoardComms commsUtil;
-		private readonly Controller controller;
+		private readonly LineFollowController controller;
 		//private readonly MeasurementUtil measurementUtil;
 
 		public Form1()
@@ -24,7 +25,13 @@ namespace SerialGUISample
 
 			//measurementUtil = new MeasurementUtil(Log);
 			controller = new LineFollowController(commsUtil, Log);
+			controller.OnTreadSpeedChanged += UpdateTread;
+			controller.PID.Kp = (float)PID_P.Value;
+			controller.PID.Ki = (float)PID_I.Value;
+			controller.PID.Kd = (float)PID_D.Value;
 		}
+
+		private readonly List<string> statusBoxUpdate = new List<string>();
 
 		private void Log(LogLevel level, string msg, params object[] arg)
 		{
@@ -33,7 +40,11 @@ namespace SerialGUISample
 				string formatMsg = string.Format(msg, arg);
 				string finalMsg = string.Format("{0}: {1}", level, formatMsg);
 				Console.WriteLine(finalMsg);
-				statusBox.AppendText(finalMsg + "\r\n");
+				lock (statusBoxUpdate)
+				{
+					statusBoxUpdate.Add(finalMsg + "\r\n");
+					//statusBox.AppendText(finalMsg + "\r\n");
+				}
 			}
 		}
 
@@ -42,17 +53,14 @@ namespace SerialGUISample
 		/// <summary> Voltage </summary>
 		/// <param name="sender"> </param>
 		/// <param name="e"> </param>
-		private void Send1_Click(object sender, EventArgs e) //Press the button to send the value to Output 1, Arduino Port A.
+		private void SendLeftTread_Click(object sender, EventArgs e) //Press the button to send the value to Output 1, Arduino Port A.
 		{
-			commsUtil.SendDutyFactor(0, (double)(BoxSendDuty1.Value / 100));
+			controller.SetLeftTread((double)LeftTreadSpeed.Value);
 		}
 
-		/// <summary> Duty Cycle </summary>
-		/// <param name="sender"> </param>
-		/// <param name="e"> </param>
-		private void Send2_Click(object sender, EventArgs e) //Press the button to send the value to Output 2, Arduino Port C.
+		private void SendRightTread_Click(object sender, EventArgs e)
 		{
-			commsUtil.SendDutyFactor(0, (double)(BoxSendDuty2.Value / 100));
+			controller.SetRightTread((double)RightTreadSpeed.Value);
 		}
 
 		private void Get1_Click(object sender, EventArgs e) //Press the button to request value from Input 1, Arduino Port F.
@@ -71,15 +79,15 @@ namespace SerialGUISample
 		{
 			TextBox box = null;
 			if (readIndex == 0)
-				box = InputBox1;
+				box = SensorReadLeft;
 			if (readIndex == 1)
-				box = InputBox2;
+				box = SensorReadRight;
 
 			if (box != null)
 			{
 				string msg = string.Format("Read Byte: {0}", readByte);
 				box.Text = msg;
-				Log(LogLevel.VERBOSE, msg);
+				//Log(LogLevel.VERBOSE, msg);
 			}
 			else
 			{
@@ -87,11 +95,45 @@ namespace SerialGUISample
 			}
 		}
 
+		private void UpdateTread(byte sendIndex, double treadSpeed)
+		{
+			NumericUpDown box = null;
+			if (sendIndex == 0)
+				box = LeftTreadSpeed;
+			if (sendIndex == 1)
+				box = RightTreadSpeed;
+
+			if (box != null)
+			{
+				box.Value = (decimal)treadSpeed;
+			}
+			else
+			{
+				Log(LogLevel.WARN, "Invalid recieve port read from serial: {0}.", sendIndex);
+			}
+		}
+
+		private static bool enabled = false;
+
 		/// <summary> While it is in fact practical to handle the buffer or waiting for events in versions of C# that aren't over a decade old we're not on one of those for some reason. </summary>
 		/// <param name="sender"> </param>
 		/// <param name="e"> </param>
 		private void GetIOtimer_Tick(object sender, EventArgs e)
 		{
+			commsUtil.Update();
+
+			if (enabled)
+				controller.Update();
+
+			lock (statusBoxUpdate)
+			{
+				foreach (string log in statusBoxUpdate)
+				{
+					statusBox.AppendText(log);
+				}
+
+				statusBoxUpdate.Clear();
+			}
 		}
 
 		/*private IEnumerable<byte> SendBytesGen
@@ -105,9 +147,39 @@ namespace SerialGUISample
 			}
 		}*/
 
-		private void AutoMeasureButton_Click(object sender, EventArgs e)
+		private void Start(object sender, EventArgs e)
 		{
+			enabled = true;
 			//measurementUtil.RunAutoMeasure(SendBytesGen, commsUtil.SendPorts[0], commsUtil.ReadPorts[0]);
+		}
+
+		private void StopButton_Click(object sender, EventArgs e)
+		{
+			enabled = false;
+			controller.SetStopped();
+		}
+
+		private void ReversedBitsBox_CheckedChanged(object sender, EventArgs e)
+		{
+			BoardComms.REVERSED_BITS = ReversedBitsBox.Checked;
+		}
+
+		private void PID_P_ValueChanged(object sender, EventArgs e)
+		{
+			controller.PID.Kp = (float)PID_P.Value;
+			Log(LogLevel.REQUESTED, "PID Kp: {0}", controller.PID.Kp);
+		}
+
+		private void PID_I_ValueChanged(object sender, EventArgs e)
+		{
+			controller.PID.Ki = (float)PID_I.Value;
+			Log(LogLevel.REQUESTED, "PID Ki: {0}", controller.PID.Ki);
+		}
+
+		private void PID_D_ValueChanged(object sender, EventArgs e)
+		{
+			controller.PID.Kd = (float)PID_D.Value;
+			Log(LogLevel.REQUESTED, "PID Kd: {0}", controller.PID.Kd);
 		}
 	}
 }

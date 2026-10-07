@@ -50,17 +50,17 @@ namespace SerialGUISample.Hardware
 
 		public void TriggerCheck(byte value)
 		{
-			Log(LogLevel.VERBOSE, "Sensor {0} parsing: {1}", this, value);
+			//Log(LogLevel.VERBOSE, "Sensor {0} parsing: {1}", this, value);
 			if (value < TrigOff && IsOn)
 			{
 				IsOn = false;
-				Log(LogLevel.VERBOSE, "Sensor state changed to: {0}", IsOn);
+				//Log(LogLevel.VERBOSE, "Sensor state changed to: {0}", IsOn);
 			}
 
 			if (value > TrigOn && !IsOn)
 			{
 				IsOn = true;
-				Log(LogLevel.VERBOSE, "Sensor state changed to: {0}", IsOn);
+				//Log(LogLevel.VERBOSE, "Sensor state changed to: {0}", IsOn);
 			}
 		}
 

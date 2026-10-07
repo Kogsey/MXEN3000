@@ -15,20 +15,6 @@ namespace SerialGUISample.Hardware
 			=> SendPorts.Concat(ReadPorts);
 
 		private readonly byte?[] recievedData = new byte?[2];
-		private IReadOnlyList<byte?> RecievedData => recievedData;
-
-		private bool TryGetSendPortIndex(byte port, out byte index)
-		{
-			int indexInt = SendPorts.GetIndex(port);
-			if (indexInt < 0 || indexInt > byte.MaxValue)
-			{
-				index = default;
-				return false;
-			}
-
-			index = (byte)indexInt;
-			return true;
-		}
 
 		private bool TryGetReadPortIndex(byte port, out byte index)
 		{
@@ -66,6 +52,18 @@ namespace SerialGUISample.Hardware
 
 			if (runSerial)
 				TryStartSerial();
+		}
+
+		public void Update()
+		{
+			lock (updateBuffer)
+			{
+				foreach ((byte port, byte value) in updateBuffer)
+				{
+					SetReadByPort(port, value, out byte index);
+					OnSerialRead(port, value);
+				}
+			}
 		}
 
 		public void TryStartSerial()
@@ -113,20 +111,16 @@ namespace SerialGUISample.Hardware
 			}
 		}
 
-		public void SendOutVoltage(byte sendIndex, double voltage)
-		{
-			Console.WriteLine("Votlage: {0}", voltage);
-			voltage = MathUtils.Clamp(voltage, -15f, 15f); // clamp voltage
-			Console.WriteLine("Clamped: {0}", voltage);
-			double dutyVal = (voltage + 15) / 30; // Convert to 01 duty value
-			SendDutyFactor(sendIndex, dutyVal);
-		}
-
+		//private const double RAMP_MIN = 0;
 		private const double RAMP_MIN = 2.76;
+
+		//private const double RAMP_MAX = 15;
 		private const double RAMP_MAX = 12;
 
 		private static double DutyByteMin => MathUtils.AmpVoltToByte(RAMP_MIN);
 		private static double DutyByteMax => MathUtils.AmpVoltToByte(RAMP_MAX);
+
+		public static bool REVERSED_BITS { get; set; }
 
 		/// <summary> Sets the motor speed based on duty cycle </summary>
 		/// <param name="Port"> Port to set. </param>
@@ -140,11 +134,17 @@ namespace SerialGUISample.Hardware
 			byte byteVal = (byte)MathUtils.RangeMap(dutyCycle, 0, 1, DutyByteMin, DutyByteMax);
 			Log(LogLevel.VERBOSE, "Expected Voltage After Amp: {0}", MathUtils.RangeMap(dutyCycle, 0, 1, RAMP_MIN, RAMP_MAX));
 			Log(LogLevel.VERBOSE, "Byte: {0}", byteVal);
-			byte reversed = MathUtils.ReverseBits(byteVal); // Reverse to fix wiring direction
-			Log(LogLevel.VERBOSE, "Reversed Byte: {0}", reversed);
 
-			Send(sendIndex, reversed);
+			if (REVERSED_BITS)
+			{
+				byteVal = MathUtils.ReverseBits(byteVal); // Reverse to fix wiring direction
+				Log(LogLevel.VERBOSE, "Reversed Byte: {0}", byteVal);
+			}
+
+			Send(sendIndex, byteVal);
 		}
+
+		private readonly List<(byte port, byte value)> updateBuffer = new List<(byte port, byte value)>();
 
 		private void OnSerialRecieve(object sender, SerialDataReceivedEventArgs e)
 		{
@@ -157,10 +157,10 @@ namespace SerialGUISample.Hardware
 				(byte, byte)? read = SerialRead();
 				if (read.HasValue)
 				{
-					(byte port, byte value) = read.Value;
-					SetReadByPort(port, value, out byte index);
-					OnSerialRead(port, value);
-					//polledUpdates.Add((index, value));
+					lock (updateBuffer)
+					{
+						updateBuffer.Add(read.Value);
+					}                   //polledUpdates.Add((index, value));
 				}
 			}
 		}
