@@ -19,7 +19,7 @@ namespace SerialGUISample
 			// Initialize required for form controls.
 			InitializeComponent();
 
-			commsUtil = new BoardComms(true, serial, Log);
+			commsUtil = new BoardComms(serial, Log);
 			commsUtil.OnSerialRead += UpdateBoxes;
 
 			controller = new LineFollowController(commsUtil, Log);
@@ -161,8 +161,8 @@ namespace SerialGUISample
 
 		private void StopButton_Click(object sender, EventArgs e)
 		{
-			ControllerEnabled = false;
 			controller.SetStopped();
+			ControllerEnabled = false;
 		}
 
 		private void ReversedBitsBox_CheckedChanged(object sender, EventArgs e)

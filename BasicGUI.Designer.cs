@@ -60,6 +60,11 @@
 			this.Controller_Speed = new System.Windows.Forms.NumericUpDown();
 			this.textBox6 = new System.Windows.Forms.TextBox();
 			this.PIDSlows = new System.Windows.Forms.CheckBox();
+			this.SerialOpenBox = new System.Windows.Forms.CheckBox();
+			this.textBox7 = new System.Windows.Forms.TextBox();
+			this.textBox8 = new System.Windows.Forms.TextBox();
+			this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
 			((System.ComponentModel.ISupportInitialize)(this.LeftTreadSpeed)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.RightTreadSpeed)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.PID_P)).BeginInit();
@@ -68,6 +73,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.RightByteSpeed)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.LeftByteSpeed)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.Controller_Speed)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// serial
@@ -442,11 +449,80 @@
 			this.PIDSlows.UseVisualStyleBackColor = true;
 			this.PIDSlows.CheckedChanged += new System.EventHandler(this.PIDSlows_CheckedChanged);
 			// 
+			// SerialOpenBox
+			// 
+			this.SerialOpenBox.AutoSize = true;
+			this.SerialOpenBox.Location = new System.Drawing.Point(451, 39);
+			this.SerialOpenBox.Name = "SerialOpenBox";
+			this.SerialOpenBox.Size = new System.Drawing.Size(92, 17);
+			this.SerialOpenBox.TabIndex = 28;
+			this.SerialOpenBox.Text = "Is Serial Open";
+			this.SerialOpenBox.UseVisualStyleBackColor = true;
+			// 
+			// textBox7
+			// 
+			this.textBox7.Location = new System.Drawing.Point(468, 199);
+			this.textBox7.Name = "textBox7";
+			this.textBox7.ReadOnly = true;
+			this.textBox7.Size = new System.Drawing.Size(75, 20);
+			this.textBox7.TabIndex = 32;
+			this.textBox7.Text = "I";
+			// 
+			// textBox8
+			// 
+			this.textBox8.Location = new System.Drawing.Point(468, 174);
+			this.textBox8.Name = "textBox8";
+			this.textBox8.ReadOnly = true;
+			this.textBox8.Size = new System.Drawing.Size(75, 20);
+			this.textBox8.TabIndex = 31;
+			this.textBox8.Text = "P";
+			// 
+			// numericUpDown1
+			// 
+			this.numericUpDown1.DecimalPlaces = 1;
+			this.numericUpDown1.Location = new System.Drawing.Point(357, 200);
+			this.numericUpDown1.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+			this.numericUpDown1.Minimum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            -2147483648});
+			this.numericUpDown1.Name = "numericUpDown1";
+			this.numericUpDown1.Size = new System.Drawing.Size(107, 20);
+			this.numericUpDown1.TabIndex = 30;
+			// 
+			// numericUpDown2
+			// 
+			this.numericUpDown2.DecimalPlaces = 1;
+			this.numericUpDown2.Location = new System.Drawing.Point(357, 174);
+			this.numericUpDown2.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+			this.numericUpDown2.Minimum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            -2147483648});
+			this.numericUpDown2.Name = "numericUpDown2";
+			this.numericUpDown2.Size = new System.Drawing.Size(75, 20);
+			this.numericUpDown2.TabIndex = 29;
+			// 
 			// MXEN300
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(555, 495);
+			this.Controls.Add(this.textBox7);
+			this.Controls.Add(this.textBox8);
+			this.Controls.Add(this.numericUpDown1);
+			this.Controls.Add(this.numericUpDown2);
+			this.Controls.Add(this.SerialOpenBox);
 			this.Controls.Add(this.PIDSlows);
 			this.Controls.Add(this.textBox6);
 			this.Controls.Add(this.Controller_Speed);
@@ -486,6 +562,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.RightByteSpeed)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.LeftByteSpeed)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.Controller_Speed)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -524,6 +602,11 @@
 		private System.Windows.Forms.NumericUpDown Controller_Speed;
 		private System.Windows.Forms.TextBox textBox6;
 		private System.Windows.Forms.CheckBox PIDSlows;
+		private System.Windows.Forms.CheckBox SerialOpenBox;
+		private System.Windows.Forms.TextBox textBox7;
+		private System.Windows.Forms.TextBox textBox8;
+		private System.Windows.Forms.NumericUpDown numericUpDown1;
+		private System.Windows.Forms.NumericUpDown numericUpDown2;
 	}
 }
 

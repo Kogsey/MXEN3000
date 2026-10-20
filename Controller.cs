@@ -9,7 +9,6 @@ namespace SerialGUISample
 		protected LogDelegate Log { get; }
 		private byte LeftSend => 0;
 		private byte RightSend => 1;
-		public virtual bool ControlLockout { get; protected set; } = false;
 
 		public Controller(BoardComms commsUtil, LogDelegate log)
 		{
@@ -27,19 +26,18 @@ namespace SerialGUISample
 
 		protected virtual void SetTread(byte sendIndex, double direction)
 		{
-			if (!ControlLockout)
-			{
-				Log(LogLevel.VERBOSE, "Passed direction to: {0} with value {1}", sendIndex, direction);
-				double duty = DirectionToDuty(direction);
-				CommsUtil.SendDutyFactor(sendIndex, duty);
-				OnTreadSpeedChanged(sendIndex, direction);
-			}
-			else
-			{
-				Log(LogLevel.REQUESTED, "Controls locked. Ignoring command to send {0} to index {1}", direction, sendIndex);
-			}
+			Log(LogLevel.VERBOSE, "Passed direction to: {0} with value {1}", sendIndex, direction);
+			double duty = DirectionToDuty(direction);
+			CommsUtil.SendDutyFactor(sendIndex, duty);
+			OnTreadSpeedChanged(sendIndex, direction);
+
+			//else
+			//{
+			//	Log(LogLevel.REQUESTED, "Controls locked. Ignoring command to send {0} to index {1}", direction, sendIndex);
+			//}
 		}
 
+		/// <summary> byte is sendIndex. double is direction. </summary>
 		public event Action<byte, double> OnTreadSpeedChanged = delegate
 		{ };
 

@@ -42,20 +42,25 @@ namespace SerialGUISample.Hardware
 
 		protected SerialPort Serial { get; }
 		protected LogDelegate Log { get; }
+		public bool RunSerial { get; private set; } = true;
+		public bool SerialOpen => Serial.IsOpen;
 
-		public BoardComms(bool runSerial, SerialPort serial, LogDelegate log)
+		public BoardComms(SerialPort serial, LogDelegate log)
 		{
 			Log = log;
 			Serial = serial;
 			Serial.ReceivedBytesThreshold = 4;
 			Serial.DataReceived += OnSerialRecieve;
 
-			if (runSerial)
-				TryStartSerial();
+			if (!Serial.IsOpen && RunSerial)
+				TryStartSerial(logFailure: true);
 		}
 
 		public void Update()
 		{
+			if (!Serial.IsOpen && RunSerial)
+				TryStartSerial(logFailure: false);
+
 			lock (updateBuffer)
 			{
 				foreach ((byte port, byte value) in updateBuffer)
@@ -66,7 +71,7 @@ namespace SerialGUISample.Hardware
 			}
 		}
 
-		public void TryStartSerial()
+		public void TryStartSerial(bool logFailure = false)
 		{
 			if (!Serial.IsOpen)                                  // Check if the serial has been connected.
 			{
@@ -76,7 +81,8 @@ namespace SerialGUISample.Hardware
 				}
 				catch
 				{
-					Log(LogLevel.ERROR, "Failed to connect.");     //If the serial does not connect return an error.
+					if (logFailure)
+						Log(LogLevel.ERROR, "Failed to connect to serial.");     //If the serial does not connect return an error.
 				}
 			}
 		}
