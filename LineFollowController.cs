@@ -1,4 +1,5 @@
 ﻿using SerialGUISample.Hardware;
+using System;
 
 namespace SerialGUISample
 {
@@ -18,8 +19,12 @@ namespace SerialGUISample
 			=> base.DirectionToDuty(MathUtils.RangeMap(direction, -1.0, 1.0, -1, 1));
 
 		public float CurrentError;
-		public float errorAccumulateRate = 0.01f;
-		public float Base = 0.5f;
+		public float timeMultiplier = 0.01f;
+		public float BaseSpeed = -0.5f;
+		public float MaxDiff = 0.5f;
+
+		private DateTime lastTimeUpdate = DateTime.Now;
+		private readonly int discardMaxMillis = 200;
 
 		public override void Update()
 		{
@@ -27,16 +32,29 @@ namespace SerialGUISample
 			LeftSense.Update();
 			RightSense.Update();
 
-			bool leftOn = LeftSense.IsOn;
+			bool leftOn = LeftSense.IsHigh;
+			bool rightOn = RightSense.IsHigh;
+			DateTime now = DateTime.Now;
+			TimeSpan diff = now - lastTimeUpdate;
+			//lastTimeUpdate = now;
 
-			if (LeftSense.IsOn && !RightSense.IsOn)
-				CurrentError -= errorAccumulateRate;
-			if (!LeftSense.IsOn && RightSense.IsOn)
-				CurrentError += errorAccumulateRate;
+			if (diff.Milliseconds > discardMaxMillis)
+				return;
+
+			if (lastTimeUpdate == null)
+				lastTimeUpdate = DateTime.Now;
+
+			if (leftOn && !rightOn)
+				CurrentError -= timeMultiplier * diff.Milliseconds;
+			if (!leftOn && rightOn)
+				CurrentError += timeMultiplier * diff.Milliseconds;
+			else
+				lastTimeUpdate = now;
 
 			float pid = PID.CalcPID(CurrentError);
+			pid = (float)MathUtils.Clamp(MaxDiff, -MaxDiff, MaxDiff);
 
-			SetTreads(Base - pid, Base + pid);
+			SetTreads(BaseSpeed - pid, BaseSpeed + pid);
 		}
 	}
 }

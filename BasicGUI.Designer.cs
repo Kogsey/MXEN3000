@@ -36,21 +36,30 @@
 			this.SensorReadLeft = new System.Windows.Forms.TextBox();
 			this.SensorReadRight = new System.Windows.Forms.TextBox();
 			this.LeftTreadSpeed = new System.Windows.Forms.NumericUpDown();
-			this.SendLeftTread = new System.Windows.Forms.Button();
+			this.SendLeftTreadMotor = new System.Windows.Forms.Button();
 			this.Get1 = new System.Windows.Forms.Button();
 			this.Get2 = new System.Windows.Forms.Button();
-			this.SendRightTread = new System.Windows.Forms.Button();
+			this.SendRightTreadMotor = new System.Windows.Forms.Button();
 			this.RightTreadSpeed = new System.Windows.Forms.NumericUpDown();
 			this.StopButton = new System.Windows.Forms.Button();
 			this.ReversedBitsBox = new System.Windows.Forms.CheckBox();
 			this.PID_P = new System.Windows.Forms.NumericUpDown();
 			this.PID_I = new System.Windows.Forms.NumericUpDown();
 			this.PID_D = new System.Windows.Forms.NumericUpDown();
+			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.textBox2 = new System.Windows.Forms.TextBox();
+			this.RightByteSpeed = new System.Windows.Forms.NumericUpDown();
+			this.LeftByteSpeed = new System.Windows.Forms.NumericUpDown();
+			this.checkBox1 = new System.Windows.Forms.CheckBox();
+			this.SendRightTreadByte = new System.Windows.Forms.Button();
+			this.SendLeftTreadByte = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.LeftTreadSpeed)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.RightTreadSpeed)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.PID_P)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.PID_I)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.PID_D)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.RightByteSpeed)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.LeftByteSpeed)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// serial
@@ -83,7 +92,7 @@
 			// 
 			// SensorReadLeft
 			// 
-			this.SensorReadLeft.Location = new System.Drawing.Point(12, 67);
+			this.SensorReadLeft.Location = new System.Drawing.Point(14, 93);
 			this.SensorReadLeft.Name = "SensorReadLeft";
 			this.SensorReadLeft.Size = new System.Drawing.Size(126, 20);
 			this.SensorReadLeft.TabIndex = 0;
@@ -91,7 +100,7 @@
 			// 
 			// SensorReadRight
 			// 
-			this.SensorReadRight.Location = new System.Drawing.Point(12, 94);
+			this.SensorReadRight.Location = new System.Drawing.Point(14, 120);
 			this.SensorReadRight.Name = "SensorReadRight";
 			this.SensorReadRight.Size = new System.Drawing.Size(126, 20);
 			this.SensorReadRight.TabIndex = 0;
@@ -105,7 +114,7 @@
             0,
             0,
             65536});
-			this.LeftTreadSpeed.Location = new System.Drawing.Point(12, 12);
+			this.LeftTreadSpeed.Location = new System.Drawing.Point(14, 38);
 			this.LeftTreadSpeed.Maximum = new decimal(new int[] {
             10,
             0,
@@ -120,19 +129,19 @@
 			this.LeftTreadSpeed.Size = new System.Drawing.Size(126, 20);
 			this.LeftTreadSpeed.TabIndex = 3;
 			// 
-			// SendLeftTread
+			// SendLeftTreadMotor
 			// 
-			this.SendLeftTread.Location = new System.Drawing.Point(142, 12);
-			this.SendLeftTread.Name = "SendLeftTread";
-			this.SendLeftTread.Size = new System.Drawing.Size(75, 20);
-			this.SendLeftTread.TabIndex = 4;
-			this.SendLeftTread.Text = "Set Left Tread";
-			this.SendLeftTread.UseVisualStyleBackColor = true;
-			this.SendLeftTread.Click += new System.EventHandler(this.SendLeftTread_Click);
+			this.SendLeftTreadMotor.Location = new System.Drawing.Point(144, 38);
+			this.SendLeftTreadMotor.Name = "SendLeftTreadMotor";
+			this.SendLeftTreadMotor.Size = new System.Drawing.Size(75, 20);
+			this.SendLeftTreadMotor.TabIndex = 4;
+			this.SendLeftTreadMotor.Text = "Set Left Tread";
+			this.SendLeftTreadMotor.UseVisualStyleBackColor = true;
+			this.SendLeftTreadMotor.Click += new System.EventHandler(this.SendLeftTread_Click);
 			// 
 			// Get1
 			// 
-			this.Get1.Location = new System.Drawing.Point(142, 67);
+			this.Get1.Location = new System.Drawing.Point(144, 93);
 			this.Get1.Name = "Get1";
 			this.Get1.Size = new System.Drawing.Size(75, 20);
 			this.Get1.TabIndex = 4;
@@ -142,7 +151,7 @@
 			// 
 			// Get2
 			// 
-			this.Get2.Location = new System.Drawing.Point(142, 94);
+			this.Get2.Location = new System.Drawing.Point(144, 120);
 			this.Get2.Name = "Get2";
 			this.Get2.Size = new System.Drawing.Size(75, 20);
 			this.Get2.TabIndex = 4;
@@ -150,15 +159,15 @@
 			this.Get2.UseVisualStyleBackColor = true;
 			this.Get2.Click += new System.EventHandler(this.Get2_Click);
 			// 
-			// SendRightTread
+			// SendRightTreadMotor
 			// 
-			this.SendRightTread.Location = new System.Drawing.Point(142, 38);
-			this.SendRightTread.Name = "SendRightTread";
-			this.SendRightTread.Size = new System.Drawing.Size(75, 20);
-			this.SendRightTread.TabIndex = 8;
-			this.SendRightTread.Text = "Set Right Tread";
-			this.SendRightTread.UseVisualStyleBackColor = true;
-			this.SendRightTread.Click += new System.EventHandler(this.SendRightTread_Click);
+			this.SendRightTreadMotor.Location = new System.Drawing.Point(144, 64);
+			this.SendRightTreadMotor.Name = "SendRightTreadMotor";
+			this.SendRightTreadMotor.Size = new System.Drawing.Size(75, 20);
+			this.SendRightTreadMotor.TabIndex = 8;
+			this.SendRightTreadMotor.Text = "Set Right Tread";
+			this.SendRightTreadMotor.UseVisualStyleBackColor = true;
+			this.SendRightTreadMotor.Click += new System.EventHandler(this.SendRightTread_Click);
 			// 
 			// RightTreadSpeed
 			// 
@@ -168,7 +177,7 @@
             0,
             0,
             65536});
-			this.RightTreadSpeed.Location = new System.Drawing.Point(12, 38);
+			this.RightTreadSpeed.Location = new System.Drawing.Point(14, 64);
 			this.RightTreadSpeed.Maximum = new decimal(new int[] {
             10,
             0,
@@ -196,7 +205,7 @@
 			// ReversedBitsBox
 			// 
 			this.ReversedBitsBox.AutoSize = true;
-			this.ReversedBitsBox.Location = new System.Drawing.Point(224, 12);
+			this.ReversedBitsBox.Location = new System.Drawing.Point(451, 12);
 			this.ReversedBitsBox.Name = "ReversedBitsBox";
 			this.ReversedBitsBox.Size = new System.Drawing.Size(92, 17);
 			this.ReversedBitsBox.TabIndex = 10;
@@ -261,23 +270,112 @@
 			this.PID_D.TabIndex = 13;
 			this.PID_D.ValueChanged += new System.EventHandler(this.PID_D_ValueChanged);
 			// 
+			// textBox1
+			// 
+			this.textBox1.Location = new System.Drawing.Point(14, 12);
+			this.textBox1.Name = "textBox1";
+			this.textBox1.ReadOnly = true;
+			this.textBox1.Size = new System.Drawing.Size(126, 20);
+			this.textBox1.TabIndex = 14;
+			this.textBox1.Text = "Motor Speed";
+			// 
+			// textBox2
+			// 
+			this.textBox2.Location = new System.Drawing.Point(225, 12);
+			this.textBox2.Name = "textBox2";
+			this.textBox2.ReadOnly = true;
+			this.textBox2.Size = new System.Drawing.Size(126, 20);
+			this.textBox2.TabIndex = 17;
+			this.textBox2.Text = "Raw Byte";
+			// 
+			// RightByteSpeed
+			// 
+			this.RightByteSpeed.Increment = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
+			this.RightByteSpeed.Location = new System.Drawing.Point(225, 64);
+			this.RightByteSpeed.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.RightByteSpeed.Name = "RightByteSpeed";
+			this.RightByteSpeed.Size = new System.Drawing.Size(126, 20);
+			this.RightByteSpeed.TabIndex = 16;
+			// 
+			// LeftByteSpeed
+			// 
+			this.LeftByteSpeed.Increment = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
+			this.LeftByteSpeed.Location = new System.Drawing.Point(225, 38);
+			this.LeftByteSpeed.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.LeftByteSpeed.Name = "LeftByteSpeed";
+			this.LeftByteSpeed.Size = new System.Drawing.Size(126, 20);
+			this.LeftByteSpeed.TabIndex = 15;
+			// 
+			// checkBox1
+			// 
+			this.checkBox1.AutoSize = true;
+			this.checkBox1.Location = new System.Drawing.Point(14, 296);
+			this.checkBox1.Name = "checkBox1";
+			this.checkBox1.Size = new System.Drawing.Size(112, 17);
+			this.checkBox1.TabIndex = 18;
+			this.checkBox1.Text = "Controller Enabled";
+			this.checkBox1.UseVisualStyleBackColor = true;
+			// 
+			// SendRightTreadByte
+			// 
+			this.SendRightTreadByte.Location = new System.Drawing.Point(357, 64);
+			this.SendRightTreadByte.Name = "SendRightTreadByte";
+			this.SendRightTreadByte.Size = new System.Drawing.Size(75, 20);
+			this.SendRightTreadByte.TabIndex = 20;
+			this.SendRightTreadByte.Text = "Set Right Tread";
+			this.SendRightTreadByte.UseVisualStyleBackColor = true;
+			this.SendRightTreadByte.Click += new System.EventHandler(this.SendRightTreadByte_Click);
+			// 
+			// SendLeftTreadByte
+			// 
+			this.SendLeftTreadByte.Location = new System.Drawing.Point(357, 38);
+			this.SendLeftTreadByte.Name = "SendLeftTreadByte";
+			this.SendLeftTreadByte.Size = new System.Drawing.Size(75, 20);
+			this.SendLeftTreadByte.TabIndex = 19;
+			this.SendLeftTreadByte.Text = "Set Left Tread";
+			this.SendLeftTreadByte.UseVisualStyleBackColor = true;
+			this.SendLeftTreadByte.Click += new System.EventHandler(this.SendLeftTreadByte_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(555, 495);
+			this.Controls.Add(this.SendRightTreadByte);
+			this.Controls.Add(this.SendLeftTreadByte);
+			this.Controls.Add(this.checkBox1);
+			this.Controls.Add(this.textBox2);
+			this.Controls.Add(this.RightByteSpeed);
+			this.Controls.Add(this.LeftByteSpeed);
+			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.PID_D);
 			this.Controls.Add(this.PID_I);
 			this.Controls.Add(this.PID_P);
 			this.Controls.Add(this.ReversedBitsBox);
 			this.Controls.Add(this.StopButton);
-			this.Controls.Add(this.SendRightTread);
+			this.Controls.Add(this.SendRightTreadMotor);
 			this.Controls.Add(this.RightTreadSpeed);
 			this.Controls.Add(this.AutoMeasureButton);
 			this.Controls.Add(this.statusBox);
 			this.Controls.Add(this.Get2);
 			this.Controls.Add(this.Get1);
-			this.Controls.Add(this.SendLeftTread);
+			this.Controls.Add(this.SendLeftTreadMotor);
 			this.Controls.Add(this.LeftTreadSpeed);
 			this.Controls.Add(this.SensorReadRight);
 			this.Controls.Add(this.SensorReadLeft);
@@ -288,6 +386,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.PID_P)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.PID_I)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.PID_D)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.RightByteSpeed)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.LeftByteSpeed)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -302,16 +402,23 @@
 		private System.Windows.Forms.TextBox SensorReadLeft;
 		private System.Windows.Forms.TextBox SensorReadRight;
 		private System.Windows.Forms.NumericUpDown LeftTreadSpeed;
-		private System.Windows.Forms.Button SendLeftTread;
+		private System.Windows.Forms.Button SendLeftTreadMotor;
 		private System.Windows.Forms.Button Get1;
 		private System.Windows.Forms.Button Get2;
-		private System.Windows.Forms.Button SendRightTread;
+		private System.Windows.Forms.Button SendRightTreadMotor;
 		private System.Windows.Forms.NumericUpDown RightTreadSpeed;
 		private System.Windows.Forms.Button StopButton;
 		private System.Windows.Forms.CheckBox ReversedBitsBox;
 		private System.Windows.Forms.NumericUpDown PID_P;
 		private System.Windows.Forms.NumericUpDown PID_I;
 		private System.Windows.Forms.NumericUpDown PID_D;
+		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.TextBox textBox2;
+		private System.Windows.Forms.NumericUpDown RightByteSpeed;
+		private System.Windows.Forms.NumericUpDown LeftByteSpeed;
+		private System.Windows.Forms.CheckBox checkBox1;
+		private System.Windows.Forms.Button SendRightTreadByte;
+		private System.Windows.Forms.Button SendLeftTreadByte;
 	}
 }
 

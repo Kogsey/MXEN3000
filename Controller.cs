@@ -10,6 +10,7 @@ namespace SerialGUISample
 		private byte LeftSend => 0;
 		private byte RightSend => 1;
 		public virtual bool ControlLockout { get; protected set; } = false;
+
 		public Controller(BoardComms commsUtil, LogDelegate log)
 		{
 			CommsUtil = commsUtil;
@@ -41,6 +42,7 @@ namespace SerialGUISample
 
 		public event Action<byte, double> OnTreadSpeedChanged = delegate
 		{ };
+
 		public event Action<byte, byte> OnSensorReadChanged = delegate
 		{ };
 

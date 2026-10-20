@@ -14,7 +14,7 @@ namespace SerialGUISample.Hardware
 		private IEnumerable<byte> AllPorts
 			=> SendPorts.Concat(ReadPorts);
 
-		private readonly byte?[] recievedData = new byte?[2];
+		public static readonly byte?[] recievedData = new byte?[2];
 
 		private bool TryGetReadPortIndex(byte port, out byte index)
 		{
@@ -108,6 +108,11 @@ namespace SerialGUISample.Hardware
 			if (Serial.IsOpen)
 			{
 				Serial.Write(Outputs, 0, 4);         //Send all four bytes to the IO card.
+				Log(LogLevel.INFO, "Serial Sent: {0}, {1}, {2}, {3}.",
+					Outputs[0],
+					Outputs[1],
+					Outputs[2],
+					Outputs[3]);
 			}
 		}
 

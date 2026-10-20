@@ -7,16 +7,16 @@ namespace SerialGUISample.Hardware
 		private readonly BoardComms Comms;
 		private readonly LogDelegate Log;
 
-		public byte TrigOn { get; set; } = 128;
-		public byte TrigOff { get; set; } = 64;
+		public byte TrigHigh { get; set; } = 240;
+		public byte TrigLow { get; set; } = 240;
 
-		public bool IsOn { get; private set; }
+		public bool IsHigh { get; private set; }
 
 		public byte ReadIndex { get; private set; }
 
 		private bool awaiting = false;
-		private readonly TimeSpan updateTime = TimeSpan.FromMilliseconds(20);
-		private readonly TimeSpan resendTimeout = TimeSpan.FromMilliseconds(100);
+		private readonly TimeSpan updateTime = TimeSpan.FromMilliseconds(100);
+		private readonly TimeSpan resendTimeout = TimeSpan.FromMilliseconds(500);
 		private DateTime lastResult = DateTime.Now;
 
 		public Sensor(BoardComms comms, LogDelegate log, byte readIndex)
@@ -29,7 +29,12 @@ namespace SerialGUISample.Hardware
 
 		public void Update()
 		{
-			RequestTimer();
+			//RequestTimer();
+			TimeSpan sinceLastResult = (DateTime.Now - lastResult);
+			Comms.RequestRead(ReadIndex);
+
+			if (BoardComms.recievedData[ReadIndex].HasValue)
+				UpdateMe(Comms.ReadPorts[ReadIndex], BoardComms.recievedData[ReadIndex].Value);
 		}
 
 		private void RequestTimer()
@@ -48,25 +53,9 @@ namespace SerialGUISample.Hardware
 			}
 		}
 
-		public void TriggerCheck(byte value)
+		private void UpdateMe(byte port, byte value)
 		{
-			//Log(LogLevel.VERBOSE, "Sensor {0} parsing: {1}", this, value);
-			if (value < TrigOff && IsOn)
-			{
-				IsOn = false;
-				//Log(LogLevel.VERBOSE, "Sensor state changed to: {0}", IsOn);
-			}
-
-			if (value > TrigOn && !IsOn)
-			{
-				IsOn = true;
-				//Log(LogLevel.VERBOSE, "Sensor state changed to: {0}", IsOn);
-			}
-		}
-
-		private void UpdateMe(byte index, byte value)
-		{
-			if (ReadIndex == index)
+			if (Comms.ReadPorts[ReadIndex] == port)
 			{
 				TriggerCheck(value);
 				awaiting = false;
@@ -74,7 +63,23 @@ namespace SerialGUISample.Hardware
 			}
 		}
 
+		public void TriggerCheck(byte value)
+		{
+			//Log(LogLevel.VERBOSE, "Sensor {0} parsing: {1}", this, value);
+			if (value < TrigLow && IsHigh)
+			{
+				IsHigh = false;
+				//Log(LogLevel.VERBOSE, "Sensor state changed to: {0}", IsOn);
+			}
+
+			if (value >= TrigHigh && !IsHigh)
+			{
+				IsHigh = true;
+				//Log(LogLevel.VERBOSE, "Sensor state changed to: {0}", IsOn);
+			}
+		}
+
 		public override string ToString()
-			=> string.Format("{{ On: {0}, Off: {1}, IsTrig: {2} }}", TrigOn, TrigOff, IsOn);
+			=> string.Format("{{ On: {0}, Off: {1}, IsTrig: {2} }}", TrigHigh, TrigLow, IsHigh);
 	}
 }

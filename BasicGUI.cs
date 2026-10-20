@@ -63,24 +63,34 @@ namespace SerialGUISample
 			controller.SetRightTread((double)RightTreadSpeed.Value);
 		}
 
+		private void SendLeftTreadByte_Click(object sender, EventArgs e)
+		{
+			commsUtil.Send(0, (byte)LeftByteSpeed.Value);
+		}
+
+		private void SendRightTreadByte_Click(object sender, EventArgs e)
+		{
+			commsUtil.Send(1, (byte)RightByteSpeed.Value);
+		}
+
 		private void Get1_Click(object sender, EventArgs e) //Press the button to request value from Input 1, Arduino Port F.
 		{
-			//commsUtil.RequestSerialRecieve(commsUtil.PortRecieve1);  // The value 0 indicates Input 1, ZERO just maintains a fixed value for the discarded data in order to maintain a consistent package format.
+			commsUtil.RequestRead(0);  // The value 0 indicates Input 1, ZERO just maintains a fixed value for the discarded data in order to maintain a consistent package format.
 		}
 
 		private void Get2_Click(object sender, EventArgs e) //Press the button to request value from Input 1, Arduino Port K.
 		{
-			//commsUtil.RequestSerialRecieve(commsUtil.PortRecieve2);  // The value 1 indicates Input 2, ZERO maintains a consistent value for the message output.
+			commsUtil.RequestRead(1);  // The value 1 indicates Input 2, ZERO maintains a consistent value for the message output.
 		}
 
 		#endregion IO
 
-		private void UpdateBoxes(byte readIndex, byte readByte)
+		private void UpdateBoxes(byte port, byte readByte)
 		{
 			TextBox box = null;
-			if (readIndex == 0)
+			if (port == commsUtil.ReadPorts[0])
 				box = SensorReadLeft;
-			if (readIndex == 1)
+			if (port == commsUtil.ReadPorts[1])
 				box = SensorReadRight;
 
 			if (box != null)
@@ -91,7 +101,7 @@ namespace SerialGUISample
 			}
 			else
 			{
-				Log(LogLevel.WARN, "Invalid recieve port read from serial: {0}.", readIndex);
+				Log(LogLevel.WARN, "Invalid recieve port read from serial: {0}.", port);
 			}
 		}
 
@@ -134,23 +144,17 @@ namespace SerialGUISample
 
 				statusBoxUpdate.Clear();
 			}
-		}
 
-		/*private IEnumerable<byte> SendBytesGen
-		{
-			get
+			for (int i = 0; i < 2; i++)
 			{
-				for (double volt = 0.0; volt <= 15.0; volt += 0.2)
-				{
-					yield return (byte)MathUtils.AmpVoltToByte(volt);
-				}
+				if (BoardComms.recievedData[i].HasValue)
+					UpdateBoxes((byte)i, BoardComms.recievedData[i].Value);
 			}
-		}*/
+		}
 
 		private void Start(object sender, EventArgs e)
 		{
 			enabled = true;
-			//measurementUtil.RunAutoMeasure(SendBytesGen, commsUtil.SendPorts[0], commsUtil.ReadPorts[0]);
 		}
 
 		private void StopButton_Click(object sender, EventArgs e)
