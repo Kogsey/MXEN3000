@@ -1,6 +1,6 @@
 ﻿namespace SerialGUISample
 {
-    partial class Form1
+    partial class MXEN300
     {
         /// <summary>
         /// Required designer variable.
@@ -50,7 +50,7 @@
 			this.textBox2 = new System.Windows.Forms.TextBox();
 			this.RightByteSpeed = new System.Windows.Forms.NumericUpDown();
 			this.LeftByteSpeed = new System.Windows.Forms.NumericUpDown();
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
+			this.ControllerEnableCheck = new System.Windows.Forms.CheckBox();
 			this.SendRightTreadByte = new System.Windows.Forms.Button();
 			this.SendLeftTreadByte = new System.Windows.Forms.Button();
 			this.SpeedPID = new System.Windows.Forms.CheckBox();
@@ -330,15 +330,15 @@
 			this.LeftByteSpeed.Size = new System.Drawing.Size(126, 20);
 			this.LeftByteSpeed.TabIndex = 15;
 			// 
-			// checkBox1
+			// ControllerEnableCheck
 			// 
-			this.checkBox1.AutoSize = true;
-			this.checkBox1.Location = new System.Drawing.Point(225, 150);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(112, 17);
-			this.checkBox1.TabIndex = 18;
-			this.checkBox1.Text = "Controller Enabled";
-			this.checkBox1.UseVisualStyleBackColor = true;
+			this.ControllerEnableCheck.AutoSize = true;
+			this.ControllerEnableCheck.Location = new System.Drawing.Point(225, 150);
+			this.ControllerEnableCheck.Name = "ControllerEnableCheck";
+			this.ControllerEnableCheck.Size = new System.Drawing.Size(112, 17);
+			this.ControllerEnableCheck.TabIndex = 18;
+			this.ControllerEnableCheck.Text = "Controller Enabled";
+			this.ControllerEnableCheck.UseVisualStyleBackColor = true;
 			// 
 			// SendRightTreadByte
 			// 
@@ -442,7 +442,7 @@
 			this.PIDSlows.UseVisualStyleBackColor = true;
 			this.PIDSlows.CheckedChanged += new System.EventHandler(this.PIDSlows_CheckedChanged);
 			// 
-			// Form1
+			// MXEN300
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -456,7 +456,7 @@
 			this.Controls.Add(this.SpeedPID);
 			this.Controls.Add(this.SendRightTreadByte);
 			this.Controls.Add(this.SendLeftTreadByte);
-			this.Controls.Add(this.checkBox1);
+			this.Controls.Add(this.ControllerEnableCheck);
 			this.Controls.Add(this.textBox2);
 			this.Controls.Add(this.RightByteSpeed);
 			this.Controls.Add(this.LeftByteSpeed);
@@ -476,7 +476,7 @@
 			this.Controls.Add(this.LeftTreadSpeed);
 			this.Controls.Add(this.SensorReadRight);
 			this.Controls.Add(this.SensorReadLeft);
-			this.Name = "Form1";
+			this.Name = "MXEN300";
 			this.Text = "Form1";
 			((System.ComponentModel.ISupportInitialize)(this.LeftTreadSpeed)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.RightTreadSpeed)).EndInit();
@@ -514,7 +514,7 @@
 		private System.Windows.Forms.TextBox textBox2;
 		private System.Windows.Forms.NumericUpDown RightByteSpeed;
 		private System.Windows.Forms.NumericUpDown LeftByteSpeed;
-		private System.Windows.Forms.CheckBox checkBox1;
+		private System.Windows.Forms.CheckBox ControllerEnableCheck;
 		private System.Windows.Forms.Button SendRightTreadByte;
 		private System.Windows.Forms.Button SendLeftTreadByte;
 		private System.Windows.Forms.CheckBox SpeedPID;

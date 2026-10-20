@@ -165,7 +165,7 @@ namespace SerialGUISample.Hardware
 					lock (updateBuffer)
 					{
 						updateBuffer.Add(read.Value);
-					}                   //polledUpdates.Add((index, value));
+					}
 				}
 			}
 		}

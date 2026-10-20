@@ -7,15 +7,14 @@ using System.Windows.Forms;
 
 namespace SerialGUISample
 {
-	public partial class Form1 : Form
+	public partial class MXEN300 : Form
 	{
 		private const LogLevel LOG_LEVEL = LogLevel.VERBOSE;
 
 		private readonly BoardComms commsUtil;
 		private readonly LineFollowController controller;
-		//private readonly MeasurementUtil measurementUtil;
 
-		public Form1()
+		public MXEN300()
 		{
 			// Initialize required for form controls.
 			InitializeComponent();
@@ -23,7 +22,6 @@ namespace SerialGUISample
 			commsUtil = new BoardComms(true, serial, Log);
 			commsUtil.OnSerialRead += UpdateBoxes;
 
-			//measurementUtil = new MeasurementUtil(Log);
 			controller = new LineFollowController(commsUtil, Log);
 			controller.OnTreadSpeedChanged += UpdateTread;
 
@@ -127,7 +125,7 @@ namespace SerialGUISample
 			}
 		}
 
-		private static bool enabled = false;
+		private bool ControllerEnabled { get => ControllerEnableCheck.Checked; set => ControllerEnableCheck.Checked = value; }
 
 		/// <summary> While it is in fact practical to handle the buffer or waiting for events in versions of C# that aren't over a decade old we're not on one of those for some reason. </summary>
 		/// <param name="sender"> </param>
@@ -136,7 +134,7 @@ namespace SerialGUISample
 		{
 			commsUtil.Update();
 
-			if (enabled)
+			if (ControllerEnabled)
 				controller.Update();
 
 			lock (statusBoxUpdate)
@@ -158,12 +156,12 @@ namespace SerialGUISample
 
 		private void Start(object sender, EventArgs e)
 		{
-			enabled = true;
+			ControllerEnabled = true;
 		}
 
 		private void StopButton_Click(object sender, EventArgs e)
 		{
-			enabled = false;
+			ControllerEnabled = false;
 			controller.SetStopped();
 		}
 
