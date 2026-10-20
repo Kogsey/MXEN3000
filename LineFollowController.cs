@@ -18,10 +18,12 @@ namespace SerialGUISample
 		public override double DirectionToDuty(double direction)
 			=> base.DirectionToDuty(MathUtils.RangeMap(direction, -1.0, 1.0, -1, 1));
 
+		public bool PIDUsesSpeed;
+		public bool PIDOnlySlows;
 		public float CurrentError;
 		public float timeMultiplier = 0.01f;
-		public float BaseSpeed = -0.5f;
-		public float MaxDiff = 0.5f;
+		public float BaseSpeed = 0;
+		public float MaxPIDAdjust = 0.5f;
 
 		private DateTime lastTimeUpdate = DateTime.Now;
 		private readonly int discardMaxMillis = 200;
@@ -51,10 +53,20 @@ namespace SerialGUISample
 			else
 				lastTimeUpdate = now;
 
-			float pid = PID.CalcPID(CurrentError);
-			pid = (float)MathUtils.Clamp(MaxDiff, -MaxDiff, MaxDiff);
+			float pid = PIDUsesSpeed ? PID.CalcPID(CurrentError, BaseSpeed) : PID.CalcPID(CurrentError);
+			pid = (float)MathUtils.Clamp(pid, -MaxPIDAdjust, MaxPIDAdjust);
 
-			SetTreads(BaseSpeed - pid, BaseSpeed + pid);
+			float left = BaseSpeed - pid;
+			float right = BaseSpeed + pid;
+			if (PIDOnlySlows)
+			{
+				if (left > BaseSpeed)
+					left = BaseSpeed;
+				if (right > BaseSpeed)
+					right = BaseSpeed;
+			}
+
+			SetTreads(left, right);
 		}
 	}
 }

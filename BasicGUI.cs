@@ -26,9 +26,13 @@ namespace SerialGUISample
 			//measurementUtil = new MeasurementUtil(Log);
 			controller = new LineFollowController(commsUtil, Log);
 			controller.OnTreadSpeedChanged += UpdateTread;
-			controller.PID.Kp = (float)PID_P.Value;
-			controller.PID.Ki = (float)PID_I.Value;
-			controller.PID.Kd = (float)PID_D.Value;
+
+			PID_P_ValueChanged(null, null);
+			PID_I_ValueChanged(null, null);
+			PID_D_ValueChanged(null, null);
+			Controller_Speed_ValueChanged(null, null);
+			SpeedPID_CheckedChanged(null, null);
+			PIDSlows_CheckedChanged(null, null);
 		}
 
 		private readonly List<string> statusBoxUpdate = new List<string>();
@@ -184,6 +188,24 @@ namespace SerialGUISample
 		{
 			controller.PID.Kd = (float)PID_D.Value;
 			Log(LogLevel.REQUESTED, "PID Kd: {0}", controller.PID.Kd);
+		}
+
+		private void Controller_Speed_ValueChanged(object sender, EventArgs e)
+		{
+			controller.BaseSpeed = (float)Controller_Speed.Value;
+			Log(LogLevel.REQUESTED, "Controller Speed: {0}", controller.BaseSpeed);
+		}
+
+		private void SpeedPID_CheckedChanged(object sender, EventArgs e)
+		{
+			controller.PIDUsesSpeed = SpeedPID.Checked;
+			Log(LogLevel.REQUESTED, "PID Speed Toggle: {0}", controller.PIDUsesSpeed);
+		}
+
+		private void PIDSlows_CheckedChanged(object sender, EventArgs e)
+		{
+			controller.PIDOnlySlows = PIDSlows.Checked;
+			Log(LogLevel.REQUESTED, "PID Slows Toggle: {0}", controller.PIDOnlySlows);
 		}
 	}
 }

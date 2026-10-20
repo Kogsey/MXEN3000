@@ -18,13 +18,13 @@ namespace SerialGUISample
 
 		private float LastError { get; set; }
 
-		public float CalcPID(float error)
+		public float CalcPID(float error, float speedMult = 1f)
 		{
 			P = error;
 			I = I + error;
 			D = error - LastError;
 
-			float result = Kp * P + Ki * I + Kd * D;
+			float result = (Kp * P + Ki * I + Kd * D) * speedMult;
 			LastError = error;
 			return result;
 		}

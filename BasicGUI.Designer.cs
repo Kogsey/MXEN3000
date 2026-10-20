@@ -53,6 +53,13 @@
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			this.SendRightTreadByte = new System.Windows.Forms.Button();
 			this.SendLeftTreadByte = new System.Windows.Forms.Button();
+			this.SpeedPID = new System.Windows.Forms.CheckBox();
+			this.textBox3 = new System.Windows.Forms.TextBox();
+			this.textBox4 = new System.Windows.Forms.TextBox();
+			this.textBox5 = new System.Windows.Forms.TextBox();
+			this.Controller_Speed = new System.Windows.Forms.NumericUpDown();
+			this.textBox6 = new System.Windows.Forms.TextBox();
+			this.PIDSlows = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.LeftTreadSpeed)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.RightTreadSpeed)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.PID_P)).BeginInit();
@@ -60,6 +67,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.PID_D)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.RightByteSpeed)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.LeftByteSpeed)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.Controller_Speed)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// serial
@@ -82,7 +90,7 @@
 			// 
 			// AutoMeasureButton
 			// 
-			this.AutoMeasureButton.Location = new System.Drawing.Point(12, 319);
+			this.AutoMeasureButton.Location = new System.Drawing.Point(14, 146);
 			this.AutoMeasureButton.Name = "AutoMeasureButton";
 			this.AutoMeasureButton.Size = new System.Drawing.Size(126, 23);
 			this.AutoMeasureButton.TabIndex = 6;
@@ -194,9 +202,9 @@
 			// 
 			// StopButton
 			// 
-			this.StopButton.Location = new System.Drawing.Point(144, 319);
+			this.StopButton.Location = new System.Drawing.Point(144, 146);
 			this.StopButton.Name = "StopButton";
-			this.StopButton.Size = new System.Drawing.Size(126, 23);
+			this.StopButton.Size = new System.Drawing.Size(75, 23);
 			this.StopButton.TabIndex = 9;
 			this.StopButton.Text = "Stop";
 			this.StopButton.UseVisualStyleBackColor = true;
@@ -216,7 +224,7 @@
 			// PID_P
 			// 
 			this.PID_P.DecimalPlaces = 1;
-			this.PID_P.Location = new System.Drawing.Point(12, 157);
+			this.PID_P.Location = new System.Drawing.Point(14, 175);
 			this.PID_P.Maximum = new decimal(new int[] {
             200,
             0,
@@ -235,7 +243,7 @@
 			// PID_I
 			// 
 			this.PID_I.DecimalPlaces = 1;
-			this.PID_I.Location = new System.Drawing.Point(12, 183);
+			this.PID_I.Location = new System.Drawing.Point(14, 201);
 			this.PID_I.Maximum = new decimal(new int[] {
             200,
             0,
@@ -254,7 +262,7 @@
 			// PID_D
 			// 
 			this.PID_D.DecimalPlaces = 1;
-			this.PID_D.Location = new System.Drawing.Point(12, 209);
+			this.PID_D.Location = new System.Drawing.Point(14, 227);
 			this.PID_D.Maximum = new decimal(new int[] {
             200,
             0,
@@ -325,7 +333,7 @@
 			// checkBox1
 			// 
 			this.checkBox1.AutoSize = true;
-			this.checkBox1.Location = new System.Drawing.Point(14, 296);
+			this.checkBox1.Location = new System.Drawing.Point(225, 150);
 			this.checkBox1.Name = "checkBox1";
 			this.checkBox1.Size = new System.Drawing.Size(112, 17);
 			this.checkBox1.TabIndex = 18;
@@ -352,11 +360,100 @@
 			this.SendLeftTreadByte.UseVisualStyleBackColor = true;
 			this.SendLeftTreadByte.Click += new System.EventHandler(this.SendLeftTreadByte_Click);
 			// 
+			// SpeedPID
+			// 
+			this.SpeedPID.AutoSize = true;
+			this.SpeedPID.Location = new System.Drawing.Point(225, 178);
+			this.SpeedPID.Name = "SpeedPID";
+			this.SpeedPID.Size = new System.Drawing.Size(105, 17);
+			this.SpeedPID.TabIndex = 21;
+			this.SpeedPID.Text = "PID Uses Speed";
+			this.SpeedPID.UseVisualStyleBackColor = true;
+			this.SpeedPID.CheckedChanged += new System.EventHandler(this.SpeedPID_CheckedChanged);
+			// 
+			// textBox3
+			// 
+			this.textBox3.Location = new System.Drawing.Point(146, 175);
+			this.textBox3.Name = "textBox3";
+			this.textBox3.ReadOnly = true;
+			this.textBox3.Size = new System.Drawing.Size(73, 20);
+			this.textBox3.TabIndex = 22;
+			this.textBox3.Text = "P";
+			// 
+			// textBox4
+			// 
+			this.textBox4.Location = new System.Drawing.Point(146, 200);
+			this.textBox4.Name = "textBox4";
+			this.textBox4.ReadOnly = true;
+			this.textBox4.Size = new System.Drawing.Size(73, 20);
+			this.textBox4.TabIndex = 23;
+			this.textBox4.Text = "I";
+			// 
+			// textBox5
+			// 
+			this.textBox5.Location = new System.Drawing.Point(146, 226);
+			this.textBox5.Name = "textBox5";
+			this.textBox5.ReadOnly = true;
+			this.textBox5.Size = new System.Drawing.Size(73, 20);
+			this.textBox5.TabIndex = 24;
+			this.textBox5.Text = "D";
+			// 
+			// Controller_Speed
+			// 
+			this.Controller_Speed.DecimalPlaces = 1;
+			this.Controller_Speed.Location = new System.Drawing.Point(14, 253);
+			this.Controller_Speed.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.Controller_Speed.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+			this.Controller_Speed.Name = "Controller_Speed";
+			this.Controller_Speed.Size = new System.Drawing.Size(126, 20);
+			this.Controller_Speed.TabIndex = 25;
+			this.Controller_Speed.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            65536});
+			this.Controller_Speed.ValueChanged += new System.EventHandler(this.Controller_Speed_ValueChanged);
+			// 
+			// textBox6
+			// 
+			this.textBox6.Location = new System.Drawing.Point(146, 253);
+			this.textBox6.Name = "textBox6";
+			this.textBox6.ReadOnly = true;
+			this.textBox6.Size = new System.Drawing.Size(73, 20);
+			this.textBox6.TabIndex = 26;
+			this.textBox6.Text = "Speed";
+			// 
+			// PIDSlows
+			// 
+			this.PIDSlows.AutoSize = true;
+			this.PIDSlows.Location = new System.Drawing.Point(225, 204);
+			this.PIDSlows.Name = "PIDSlows";
+			this.PIDSlows.Size = new System.Drawing.Size(99, 17);
+			this.PIDSlows.TabIndex = 27;
+			this.PIDSlows.Text = "PID Only Slows";
+			this.PIDSlows.UseVisualStyleBackColor = true;
+			this.PIDSlows.CheckedChanged += new System.EventHandler(this.PIDSlows_CheckedChanged);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(555, 495);
+			this.Controls.Add(this.PIDSlows);
+			this.Controls.Add(this.textBox6);
+			this.Controls.Add(this.Controller_Speed);
+			this.Controls.Add(this.textBox5);
+			this.Controls.Add(this.textBox4);
+			this.Controls.Add(this.textBox3);
+			this.Controls.Add(this.SpeedPID);
 			this.Controls.Add(this.SendRightTreadByte);
 			this.Controls.Add(this.SendLeftTreadByte);
 			this.Controls.Add(this.checkBox1);
@@ -388,6 +485,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.PID_D)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.RightByteSpeed)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.LeftByteSpeed)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.Controller_Speed)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -419,6 +517,13 @@
 		private System.Windows.Forms.CheckBox checkBox1;
 		private System.Windows.Forms.Button SendRightTreadByte;
 		private System.Windows.Forms.Button SendLeftTreadByte;
+		private System.Windows.Forms.CheckBox SpeedPID;
+		private System.Windows.Forms.TextBox textBox3;
+		private System.Windows.Forms.TextBox textBox4;
+		private System.Windows.Forms.TextBox textBox5;
+		private System.Windows.Forms.NumericUpDown Controller_Speed;
+		private System.Windows.Forms.TextBox textBox6;
+		private System.Windows.Forms.CheckBox PIDSlows;
 	}
 }
 
