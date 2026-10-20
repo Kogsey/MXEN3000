@@ -85,7 +85,7 @@
 			// 
 			this.getIOtimer.Enabled = true;
 			this.getIOtimer.Interval = 10;
-			this.getIOtimer.Tick += new System.EventHandler(this.GetIOtimer_Tick);
+			this.getIOtimer.Tick += new System.EventHandler(this.UpdateLoop);
 			// 
 			// statusBox
 			// 

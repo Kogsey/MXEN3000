@@ -127,10 +127,7 @@ namespace SerialGUISample
 
 		private bool ControllerEnabled { get => ControllerEnableCheck.Checked; set => ControllerEnableCheck.Checked = value; }
 
-		/// <summary> While it is in fact practical to handle the buffer or waiting for events in versions of C# that aren't over a decade old we're not on one of those for some reason. </summary>
-		/// <param name="sender"> </param>
-		/// <param name="e"> </param>
-		private void GetIOtimer_Tick(object sender, EventArgs e)
+		private void UpdateLoop(object sender, EventArgs e)
 		{
 			commsUtil.Update();
 
@@ -152,6 +149,11 @@ namespace SerialGUISample
 				if (BoardComms.recievedData[i].HasValue)
 					UpdateBoxes((byte)i, BoardComms.recievedData[i].Value);
 			}
+		}
+
+		private void UpdateUI()
+		{
+			SerialOpenBox.Checked = commsUtil.SerialOpen;
 		}
 
 		private void Start(object sender, EventArgs e)
