@@ -20,13 +20,19 @@ namespace SerialGUISample
 
 		public bool PIDUsesSpeed;
 		public bool PIDOnlySlows;
-		public float CurrentError;
-		public float timeMultiplier = 0.01f;
-		public float BaseSpeed = 0;
-		public float MaxPIDAdjust = 0.5f;
+		public double CurrentError;
+		public double timeMultiplier = 0.01f;
+		public double BaseSpeed = 0;
+		public double MaxPIDAdjust = 0.5f;
 
 		private DateTime lastTimeUpdate = DateTime.Now;
 		private readonly int discardMaxMillis = 200;
+
+		public override void SetStarted()
+		{
+			base.SetStarted();
+			lastTimeUpdate = DateTime.Now;
+		}
 
 		public override void Update()
 		{
@@ -47,17 +53,17 @@ namespace SerialGUISample
 				lastTimeUpdate = DateTime.Now;
 
 			if (leftOn && !rightOn)
-				CurrentError -= timeMultiplier * diff.Milliseconds;
+				CurrentError -= timeMultiplier * diff.Seconds;
 			if (!leftOn && rightOn)
-				CurrentError += timeMultiplier * diff.Milliseconds;
+				CurrentError += timeMultiplier * diff.Seconds;
 			else
 				lastTimeUpdate = now;
 
-			float pid = PIDUsesSpeed ? PID.CalcPID(CurrentError, BaseSpeed) : PID.CalcPID(CurrentError);
-			pid = (float)MathUtils.Clamp(pid, -MaxPIDAdjust, MaxPIDAdjust);
+			double pid = PIDUsesSpeed ? PID.CalcPID(CurrentError, BaseSpeed) : PID.CalcPID(CurrentError);
+			pid = MathUtils.Clamp(pid, -MaxPIDAdjust, MaxPIDAdjust);
 
-			float left = BaseSpeed - pid;
-			float right = BaseSpeed + pid;
+			double left = BaseSpeed - pid;
+			double right = BaseSpeed + pid;
 			if (PIDOnlySlows)
 			{
 				if (left > BaseSpeed)

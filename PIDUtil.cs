@@ -8,23 +8,23 @@ namespace SerialGUISample
 {
 	public class PIDUtil
 	{
-		public float P { get; private set; }
-		public float I { get; private set; }
-		public float D { get; private set; }
+		public double P { get; private set; }
+		public double I { get; private set; }
+		public double D { get; private set; }
 
-		public float Kp { get; set; }
-		public float Ki { get; set; }
-		public float Kd { get; set; }
+		public double Kp { get; set; }
+		public double Ki { get; set; }
+		public double Kd { get; set; }
 
-		private float LastError { get; set; }
+		private double LastError { get; set; }
 
-		public float CalcPID(float error, float speedMult = 1f)
+		public double CalcPID(double error, double speedMult = 1f)
 		{
 			P = error;
 			I = I + error;
 			D = error - LastError;
 
-			float result = (Kp * P + Ki * I + Kd * D) * speedMult;
+			double result = (Kp * P + Ki * I + Kd * D) * speedMult;
 			LastError = error;
 			return result;
 		}

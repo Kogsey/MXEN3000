@@ -10,6 +10,14 @@ namespace SerialGUISample
 		private byte LeftSend => 0;
 		private byte RightSend => 1;
 
+		public bool UseDeadZones { get; set; }
+		private static readonly (double low, double zero, double high) DEAD_DEFAULT = (0, 0, 0);
+		public (double low, double zero, double high) LeftDeadZones { get; set; } = DEAD_DEFAULT;
+		public (double low, double zero, double high) RightDeadZones { get; set; } = DEAD_DEFAULT;
+
+		public (double low, double zero, double high) GetDeadZone(byte sendIndex)
+			=> sendIndex == LeftSend ? LeftDeadZones : (sendIndex == RightSend ? RightDeadZones : DEAD_DEFAULT);
+
 		public Controller(BoardComms commsUtil, LogDelegate log)
 		{
 			CommsUtil = commsUtil;
@@ -27,6 +35,25 @@ namespace SerialGUISample
 		protected virtual void SetTread(byte sendIndex, double direction)
 		{
 			Log(LogLevel.VERBOSE, "Passed direction to: {0} with value {1}", sendIndex, direction);
+			direction = MathUtils.Clamp(direction, -1, 1);
+
+			if (UseDeadZones)
+			{
+				(double low, double zero, double high) = GetDeadZone(sendIndex);
+				if (direction < 0)
+				{
+					direction = MathUtils.RangeMap(direction, 0, -1, low, -1);
+				}
+				else if (direction > 0)
+				{
+					direction = MathUtils.RangeMap(direction, 0, 1, high, 1);
+				}
+				else if (direction == 0)
+				{
+					direction = zero;
+				}
+			}
+
 			double duty = DirectionToDuty(direction);
 			CommsUtil.SendDutyFactor(sendIndex, duty);
 			OnTreadSpeedChanged(sendIndex, direction);
@@ -39,9 +66,6 @@ namespace SerialGUISample
 
 		/// <summary> byte is sendIndex. double is direction. </summary>
 		public event Action<byte, double> OnTreadSpeedChanged = delegate
-		{ };
-
-		public event Action<byte, byte> OnSensorReadChanged = delegate
 		{ };
 
 		/// <summary> Controls the motor for the left tread. </summary>
@@ -59,6 +83,9 @@ namespace SerialGUISample
 			SetLeftTread(leftDir);
 			SetRightTread(rightDir);
 		}
+
+		public virtual void SetStarted()
+		{ }
 
 		public virtual void SetStopped()
 			=> SetTreads(0, 0);

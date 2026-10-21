@@ -53,9 +53,9 @@ namespace SerialGUISample.Hardware
 			}
 		}
 
-		private void UpdateMe(byte port, byte value)
+		private void UpdateMe(byte readIndex, byte value)
 		{
-			if (Comms.ReadPorts[ReadIndex] == port)
+			if (ReadIndex == readIndex)
 			{
 				TriggerCheck(value);
 				awaiting = false;

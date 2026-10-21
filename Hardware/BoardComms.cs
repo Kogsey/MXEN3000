@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
@@ -14,6 +13,7 @@ namespace SerialGUISample.Hardware
 		private IEnumerable<byte> AllPorts
 			=> SendPorts.Concat(ReadPorts);
 
+		/// <summary> Indexed by index not port </summary>
 		public static readonly byte?[] recievedData = new byte?[2];
 
 		private bool TryGetReadPortIndex(byte port, out byte index)
@@ -63,17 +63,19 @@ namespace SerialGUISample.Hardware
 
 			lock (updateBuffer)
 			{
-				foreach ((byte port, byte value) in updateBuffer)
+				foreach ((byte readIndex, byte value) in updateBuffer)
 				{
-					SetReadByPort(port, value, out byte index);
-					OnSerialRead(port, value);
+					OnSerialRead(readIndex, value);
 				}
 			}
 		}
 
-		public void TryStartSerial(bool logFailure = false)
+		/// <summary> </summary>
+		/// <param name="logFailure"> </param>
+		/// <returns> true if serial is open after the function is complete regardless of if it was open beforehand. </returns>
+		public bool TryStartSerial(bool logFailure = false)
 		{
-			if (!Serial.IsOpen)                                  // Check if the serial has been connected.
+			if (!SerialOpen)                                  // Check if the serial has been connected.
 			{
 				try
 				{
@@ -85,6 +87,8 @@ namespace SerialGUISample.Hardware
 						Log(LogLevel.ERROR, "Failed to connect to serial.");     //If the serial does not connect return an error.
 				}
 			}
+
+			return SerialOpen;
 		}
 
 		public void Send(byte sendIndex, byte data)
@@ -106,6 +110,9 @@ namespace SerialGUISample.Hardware
 
 		private void SerialSend(byte port, byte data)
 		{
+			if (!TryStartSerial(logFailure: true))
+				return;
+
 			Outputs[0] = MathUtils.START;    //Set the first byte to the start value that indicates the beginning of the message.
 			Outputs[1] = port;     //Set the second byte to represent the port where, Input 1 = 0, Input 2 = 1, Output 1 = 2 & Output 2 = 3. This could be enumerated to make writing code simpler... (see Arduino driver)
 			Outputs[2] = data;  //Set the third byte to the value to be assigned to the port. This is only necessary for outputs, however it is best to assign a consistent value such as 0 for input ports.
@@ -131,7 +138,7 @@ namespace SerialGUISample.Hardware
 		private static double DutyByteMin => MathUtils.AmpVoltToByte(RAMP_MIN);
 		private static double DutyByteMax => MathUtils.AmpVoltToByte(RAMP_MAX);
 
-		public static bool REVERSED_BITS { get; set; }
+		public bool ReverseSendBits { get; set; }
 
 		/// <summary> Sets the motor speed based on duty cycle </summary>
 		/// <param name="Port"> Port to set. </param>
@@ -146,7 +153,7 @@ namespace SerialGUISample.Hardware
 			Log(LogLevel.VERBOSE, "Expected Voltage After Amp: {0}", MathUtils.RangeMap(dutyCycle, 0, 1, RAMP_MIN, RAMP_MAX));
 			Log(LogLevel.VERBOSE, "Byte: {0}", byteVal);
 
-			if (REVERSED_BITS)
+			if (ReverseSendBits)
 			{
 				byteVal = MathUtils.ReverseBits(byteVal); // Reverse to fix wiring direction
 				Log(LogLevel.VERBOSE, "Reversed Byte: {0}", byteVal);
@@ -155,7 +162,7 @@ namespace SerialGUISample.Hardware
 			Send(sendIndex, byteVal);
 		}
 
-		private readonly List<(byte port, byte value)> updateBuffer = new List<(byte port, byte value)>();
+		private readonly List<(byte readIndex, byte value)> updateBuffer = new List<(byte port, byte value)>();
 
 		private void OnSerialRecieve(object sender, SerialDataReceivedEventArgs e)
 		{
@@ -168,9 +175,11 @@ namespace SerialGUISample.Hardware
 				(byte, byte)? read = SerialRead();
 				if (read.HasValue)
 				{
+					(byte port, byte value) = read.Value;
+					SetReadByPort(port, value, out byte index);
 					lock (updateBuffer)
 					{
-						updateBuffer.Add(read.Value);
+						updateBuffer.Add((index, value));
 					}
 				}
 			}
@@ -215,7 +224,7 @@ namespace SerialGUISample.Hardware
 				Log(LogLevel.WARN, "startByte was {0} instead of the start byte.", startByte);
 			}
 
-			return (default, default);
+			return default;
 		}
 	}
 }
