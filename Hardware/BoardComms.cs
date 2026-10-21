@@ -59,14 +59,15 @@ namespace SerialGUISample.Hardware
 
 		public void Update()
 		{
-			if (!Serial.IsOpen && RunSerial)
-				TryStartSerial(logFailure: false);
+			//if (!Serial.IsOpen && RunSerial)
+			//	TryStartSerial(logFailure: false);
 
-			while (updateBuffer.TryDequeue(out (byte readIndex, byte value) val))
-			{
-				(byte readIndex, byte value) = val;
-				OnSerialRead(readIndex, value);
-			}
+			if (updateBuffer.Count > 0)
+				while (updateBuffer.TryDequeue(out (byte readIndex, byte value) val))
+				{
+					(byte readIndex, byte value) = val;
+					OnSerialRead(readIndex, value);
+				}
 		}
 
 		/// <summary> </summary>

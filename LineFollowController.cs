@@ -12,8 +12,8 @@ namespace SerialGUISample
 
 		public LineFollowController(BoardComms commsUtil, LogDelegate log) : base(commsUtil, log)
 		{
-			LeftSense = new Sensor(commsUtil, log, 0);
-			RightSense = new Sensor(commsUtil, log, 1);
+			LeftSense = new Sensor(commsUtil, log, 1);
+			RightSense = new Sensor(commsUtil, log, 0);
 		}
 
 		public override double DirectionToDuty(double direction)
@@ -53,14 +53,14 @@ namespace SerialGUISample
 			//	return;
 
 			bool BANGBANG = true;
-			double slowSpeed = 0;
+			double slowSpeed = -BaseSpeed;
 			if (BANGBANG)
 			{
 				if (leftHigh && !rightHigh)
 					SetTreads(slowSpeed, BaseSpeed);
-				if (!leftHigh && rightHigh)
+				else if (!leftHigh && rightHigh)
 					SetTreads(BaseSpeed, slowSpeed);
-				if (!leftHigh && !rightHigh)
+				else if (!leftHigh && !rightHigh)
 					SetTreads(0, 0);
 				else
 					SetTreads(BaseSpeed, BaseSpeed);
@@ -68,10 +68,10 @@ namespace SerialGUISample
 			else
 			{
 				if (leftHigh && !rightHigh)
-					CurrentError -= timeMultiplier * diff.TotalMilliseconds;
-				if (!leftHigh && rightHigh)
 					CurrentError += timeMultiplier * diff.TotalMilliseconds;
-				if (!leftHigh && !rightHigh)
+				else if (!leftHigh && rightHigh)
+					CurrentError -= timeMultiplier * diff.TotalMilliseconds;
+				else if (!leftHigh && !rightHigh)
 				{
 					SetTreads(0, 0);
 					lastTimeUpdate = now;

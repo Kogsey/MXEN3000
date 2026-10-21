@@ -97,6 +97,7 @@
 			// 
 			// serial
 			// 
+			this.serial.BaudRate = 115200;
 			this.serial.PortName = "COM5";
 			// 
 			// getIOtimer
@@ -479,7 +480,7 @@
 			this.Controller_Speed.Size = new System.Drawing.Size(126, 20);
 			this.Controller_Speed.TabIndex = 13;
 			this.Controller_Speed.Value = new decimal(new int[] {
-            8,
+            5,
             0,
             0,
             65536});
@@ -714,7 +715,7 @@
 			this.RightSenseThresh.Size = new System.Drawing.Size(126, 20);
 			this.RightSenseThresh.TabIndex = 30;
 			this.RightSenseThresh.Value = new decimal(new int[] {
-            235,
+            215,
             0,
             0,
             0});
@@ -742,7 +743,7 @@
 			this.LeftSenseThresh.Size = new System.Drawing.Size(126, 20);
 			this.LeftSenseThresh.TabIndex = 29;
 			this.LeftSenseThresh.Value = new decimal(new int[] {
-            235,
+            215,
             0,
             0,
             0});
@@ -779,8 +780,6 @@
 			// DeadZoneCheck
 			// 
 			this.DeadZoneCheck.AutoSize = true;
-			this.DeadZoneCheck.Checked = true;
-			this.DeadZoneCheck.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.DeadZoneCheck.Location = new System.Drawing.Point(436, 12);
 			this.DeadZoneCheck.Name = "DeadZoneCheck";
 			this.DeadZoneCheck.Size = new System.Drawing.Size(107, 17);

@@ -10,7 +10,11 @@ namespace SerialGUISample.Hardware
 		public byte Trig { get; set; } = 240;
 		//public byte TrigLow { get; set; } = 240;
 
-		public bool IsHigh { get; private set; }
+		public bool IsHigh
+		{
+			get => BoardComms.recievedData[ReadIndex].HasValue ? TriggerCheck(BoardComms.recievedData[ReadIndex].Value) : false;
+			set { }
+		}
 
 		public byte ReadIndex { get; private set; }
 
@@ -24,7 +28,7 @@ namespace SerialGUISample.Hardware
 			Log = log;
 			ReadIndex = readIndex;
 			Comms = comms;
-			//Comms.OnSerialRead += UpdateMe;
+			Comms.OnSerialRead += UpdateMe;
 		}
 
 		public void Update()
@@ -63,12 +67,15 @@ namespace SerialGUISample.Hardware
 			}
 		}
 
-		public void TriggerCheck(byte value)
+		public bool TriggerCheck(byte value)
 		{
+			bool val = false;
 			if (value < Trig)
-				IsHigh = false;
+				val = false;
 			if (value > Trig)
-				IsHigh = true;
+				val = true;
+
+			return val;
 		}
 
 		public override string ToString()

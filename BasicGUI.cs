@@ -23,7 +23,7 @@ namespace SerialGUISample
 			commsUtil.OnSerialRead += UpdateReadBoxes;
 
 			controller = new LineFollowController(commsUtil, Log);
-			//controller.OnTreadSpeedChanged += UpdateTread;
+			controller.OnTreadSpeedChanged += UpdateTread;
 
 			PID_P_ValueChanged(null, null);
 			PID_I_ValueChanged(null, null);
@@ -47,7 +47,7 @@ namespace SerialGUISample
 
 		private void Log(LogLevel level, string msg, params object[] arg)
 		{
-			return;
+			//return;
 			if (level >= LOG_LEVEL)
 			{
 				string formatMsg = string.Format(msg, arg);
