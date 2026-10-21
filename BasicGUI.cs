@@ -35,6 +35,8 @@ namespace SerialGUISample
 			LeftDeadZones_ValueChanged(null, null);
 			RightDeadZones_ValueChanged(null, null);
 			ReversedBitsBox_CheckedChanged(null, null);
+			LeftSenseThresh_ValueChanged(null, null);
+			RightSenseThresh_ValueChanged(null, null);
 		}
 
 		private readonly List<string> statusBoxUpdate = new List<string>();
@@ -118,10 +120,10 @@ namespace SerialGUISample
 		{
 			SerialOpenBox.Checked = commsUtil.SerialOpen;
 
-			for (int i = 0; i < 2; i++)
+			for (byte i = 0; i < 2; i++)
 			{
 				if (BoardComms.recievedData[i].HasValue)
-					UpdateReadBoxes((byte)i, BoardComms.recievedData[i].Value);
+					UpdateReadBoxes(i, BoardComms.recievedData[i].Value);
 			}
 		}
 
@@ -130,25 +132,25 @@ namespace SerialGUISample
 		private void SendLeftTread_Click(object sender, EventArgs e)
 		{
 			controller.SetLeftTread((double)LeftTreadSpeed.Value);
-			Log(LogLevel.REQUESTED, "Sent left tread speed: {0}", (double)LeftTreadSpeed.Value);
+			Log(LogLevel.GUI, "Sent left tread speed: {0}", (double)LeftTreadSpeed.Value);
 		}
 
 		private void SendRightTread_Click(object sender, EventArgs e)
 		{
 			controller.SetRightTread((double)RightTreadSpeed.Value);
-			Log(LogLevel.REQUESTED, "Sent right tread speed: {0}", (double)RightTreadSpeed.Value);
+			Log(LogLevel.GUI, "Sent right tread speed: {0}", (double)RightTreadSpeed.Value);
 		}
 
 		private void SendLeftTreadByte_Click(object sender, EventArgs e)
 		{
 			commsUtil.Send(0, (byte)LeftByteSpeed.Value);
-			Log(LogLevel.REQUESTED, "Sent left tread byte: {0}", (byte)LeftByteSpeed.Value);
+			Log(LogLevel.GUI, "Sent left tread byte: {0}", (byte)LeftByteSpeed.Value);
 		}
 
 		private void SendRightTreadByte_Click(object sender, EventArgs e)
 		{
 			commsUtil.Send(1, (byte)RightByteSpeed.Value);
-			Log(LogLevel.REQUESTED, "Sent right tread byte: {0}", (byte)RightByteSpeed.Value);
+			Log(LogLevel.GUI, "Sent right tread byte: {0}", (byte)RightByteSpeed.Value);
 		}
 
 		private void LeftRequestRead_Click(object sender, EventArgs e)
@@ -165,70 +167,82 @@ namespace SerialGUISample
 		{
 			ControllerEnabled = true;
 			controller.SetStarted();
-			Log(LogLevel.REQUESTED, "Started");
+			Log(LogLevel.GUI, "Started");
 		}
 
 		private void StopButton_Click(object sender, EventArgs e)
 		{
 			controller.SetStopped();
 			ControllerEnabled = false;
-			Log(LogLevel.REQUESTED, "Stopped");
+			Log(LogLevel.GUI, "Stopped");
 		}
 
 		private void ReversedBitsBox_CheckedChanged(object sender, EventArgs e)
 		{
 			commsUtil.ReverseSendBits = ReversedBitsBox.Checked;
-			Log(LogLevel.REQUESTED, "Reversed Bits Check: {0}", commsUtil.ReverseSendBits);
+			Log(LogLevel.GUI, "Reversed Bits Check: {0}", commsUtil.ReverseSendBits);
 		}
 
 		private void PID_P_ValueChanged(object sender, EventArgs e)
 		{
 			controller.PID.Kp = (double)PID_P.Value;
-			Log(LogLevel.REQUESTED, "PID Kp: {0}", controller.PID.Kp);
+			Log(LogLevel.GUI, "PID Kp: {0}", controller.PID.Kp);
 		}
 
 		private void PID_I_ValueChanged(object sender, EventArgs e)
 		{
 			controller.PID.Ki = (double)PID_I.Value;
-			Log(LogLevel.REQUESTED, "PID Ki: {0}", controller.PID.Ki);
+			Log(LogLevel.GUI, "PID Ki: {0}", controller.PID.Ki);
 		}
 
 		private void PID_D_ValueChanged(object sender, EventArgs e)
 		{
 			controller.PID.Kd = (double)PID_D.Value;
-			Log(LogLevel.REQUESTED, "PID Kd: {0}", controller.PID.Kd);
+			Log(LogLevel.GUI, "PID Kd: {0}", controller.PID.Kd);
 		}
 
 		private void Controller_Speed_ValueChanged(object sender, EventArgs e)
 		{
 			controller.BaseSpeed = (double)Controller_Speed.Value;
-			Log(LogLevel.REQUESTED, "Controller Speed: {0}", controller.BaseSpeed);
+			Log(LogLevel.GUI, "Controller Speed: {0}", controller.BaseSpeed);
 		}
 
 		private void SpeedPID_CheckedChanged(object sender, EventArgs e)
 		{
 			controller.PIDUsesSpeed = SpeedPID.Checked;
-			Log(LogLevel.REQUESTED, "PID Speed Toggle: {0}", controller.PIDUsesSpeed);
+			Log(LogLevel.GUI, "PID Speed Toggle: {0}", controller.PIDUsesSpeed);
 		}
 
 		private void PIDSlows_CheckedChanged(object sender, EventArgs e)
 		{
 			controller.PIDOnlySlows = PIDSlows.Checked;
-			Log(LogLevel.REQUESTED, "PID Slows Toggle: {0}", controller.PIDOnlySlows);
+			Log(LogLevel.GUI, "PID Slows Toggle: {0}", controller.PIDOnlySlows);
 		}
 
 		private void LeftDeadZones_ValueChanged(object sender, EventArgs e)
 		{
 			controller.LeftDeadZones = ((double)LeftDeadLow.Value, (double)LeftDeadZero.Value, (double)LeftDeadHigh.Value);
-			Log(LogLevel.REQUESTED, "Updated left dead zones: {0}", controller.LeftDeadZones);
+			Log(LogLevel.GUI, "Updated left dead zones: {0}", controller.LeftDeadZones);
 		}
 
 		private void RightDeadZones_ValueChanged(object sender, EventArgs e)
 		{
 			controller.RightDeadZones = ((double)RightDeadLow.Value, (double)RightDeadZero.Value, (double)RightDeadHigh.Value);
-			Log(LogLevel.REQUESTED, "Updated right dead zones: {0}", controller.RightDeadZones);
+			Log(LogLevel.GUI, "Updated right dead zones: {0}", controller.RightDeadZones);
 		}
 
 		#endregion IO
+
+		private void RightSenseThresh_ValueChanged(object sender, EventArgs e)
+		{
+			controller.RightSense.TrigHigh = controller.RightSense.TrigLow = (byte)RightSenseThresh.Value;
+			Log(LogLevel.GUI, "Updated right sensor threshold: {0}", controller.RightSense.TrigHigh);
+		}
+
+		private void LeftSenseThresh_ValueChanged(object sender, EventArgs e)
+		{
+			controller.LeftSense.TrigHigh = controller.LeftSense.TrigLow = (byte)LeftSenseThresh.Value;
+			Log(LogLevel.GUI, "Updated left sensor threshold: {0}", controller.LeftSense.TrigHigh);
+		}
 	}
 }

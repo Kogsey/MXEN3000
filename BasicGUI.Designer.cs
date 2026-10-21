@@ -69,6 +69,10 @@
 			this.RightDeadZero = new System.Windows.Forms.NumericUpDown();
 			this.RightDeadLow = new System.Windows.Forms.NumericUpDown();
 			this.textBox10 = new System.Windows.Forms.TextBox();
+			this.RightSenseThresh = new System.Windows.Forms.NumericUpDown();
+			this.textBox7 = new System.Windows.Forms.TextBox();
+			this.LeftSenseThresh = new System.Windows.Forms.NumericUpDown();
+			this.textBox8 = new System.Windows.Forms.TextBox();
 			((System.ComponentModel.ISupportInitialize)(this.LeftTreadSpeed)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.RightTreadSpeed)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.PID_P)).BeginInit();
@@ -83,6 +87,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.RightDeadHigh)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.RightDeadZero)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.RightDeadLow)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.RightSenseThresh)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.LeftSenseThresh)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// serial
@@ -97,16 +103,16 @@
 			// 
 			// statusBox
 			// 
-			this.statusBox.Location = new System.Drawing.Point(12, 348);
+			this.statusBox.Location = new System.Drawing.Point(12, 279);
 			this.statusBox.Multiline = true;
 			this.statusBox.Name = "statusBox";
-			this.statusBox.Size = new System.Drawing.Size(531, 135);
+			this.statusBox.Size = new System.Drawing.Size(531, 204);
 			this.statusBox.TabIndex = 5;
 			this.statusBox.TabStop = false;
 			// 
 			// AutoMeasureButton
 			// 
-			this.AutoMeasureButton.Location = new System.Drawing.Point(14, 146);
+			this.AutoMeasureButton.Location = new System.Drawing.Point(12, 146);
 			this.AutoMeasureButton.Name = "AutoMeasureButton";
 			this.AutoMeasureButton.Size = new System.Drawing.Size(126, 23);
 			this.AutoMeasureButton.TabIndex = 8;
@@ -116,7 +122,7 @@
 			// 
 			// SensorReadLeft
 			// 
-			this.SensorReadLeft.Location = new System.Drawing.Point(14, 93);
+			this.SensorReadLeft.Location = new System.Drawing.Point(12, 93);
 			this.SensorReadLeft.Name = "SensorReadLeft";
 			this.SensorReadLeft.Size = new System.Drawing.Size(126, 20);
 			this.SensorReadLeft.TabIndex = 4;
@@ -124,7 +130,7 @@
 			// 
 			// SensorReadRight
 			// 
-			this.SensorReadRight.Location = new System.Drawing.Point(14, 120);
+			this.SensorReadRight.Location = new System.Drawing.Point(12, 120);
 			this.SensorReadRight.Name = "SensorReadRight";
 			this.SensorReadRight.Size = new System.Drawing.Size(126, 20);
 			this.SensorReadRight.TabIndex = 6;
@@ -138,7 +144,7 @@
             0,
             0,
             65536});
-			this.LeftTreadSpeed.Location = new System.Drawing.Point(14, 38);
+			this.LeftTreadSpeed.Location = new System.Drawing.Point(12, 38);
 			this.LeftTreadSpeed.Maximum = new decimal(new int[] {
             10,
             0,
@@ -155,7 +161,7 @@
 			// 
 			// SendLeftTreadMotor
 			// 
-			this.SendLeftTreadMotor.Location = new System.Drawing.Point(144, 38);
+			this.SendLeftTreadMotor.Location = new System.Drawing.Point(142, 38);
 			this.SendLeftTreadMotor.Name = "SendLeftTreadMotor";
 			this.SendLeftTreadMotor.Size = new System.Drawing.Size(75, 20);
 			this.SendLeftTreadMotor.TabIndex = 1;
@@ -165,7 +171,7 @@
 			// 
 			// Get1
 			// 
-			this.Get1.Location = new System.Drawing.Point(144, 93);
+			this.Get1.Location = new System.Drawing.Point(142, 93);
 			this.Get1.Name = "Get1";
 			this.Get1.Size = new System.Drawing.Size(75, 20);
 			this.Get1.TabIndex = 5;
@@ -175,7 +181,7 @@
 			// 
 			// Get2
 			// 
-			this.Get2.Location = new System.Drawing.Point(144, 120);
+			this.Get2.Location = new System.Drawing.Point(142, 120);
 			this.Get2.Name = "Get2";
 			this.Get2.Size = new System.Drawing.Size(75, 20);
 			this.Get2.TabIndex = 7;
@@ -185,7 +191,7 @@
 			// 
 			// SendRightTreadMotor
 			// 
-			this.SendRightTreadMotor.Location = new System.Drawing.Point(144, 64);
+			this.SendRightTreadMotor.Location = new System.Drawing.Point(142, 64);
 			this.SendRightTreadMotor.Name = "SendRightTreadMotor";
 			this.SendRightTreadMotor.Size = new System.Drawing.Size(75, 20);
 			this.SendRightTreadMotor.TabIndex = 3;
@@ -201,7 +207,7 @@
             0,
             0,
             65536});
-			this.RightTreadSpeed.Location = new System.Drawing.Point(14, 64);
+			this.RightTreadSpeed.Location = new System.Drawing.Point(12, 64);
 			this.RightTreadSpeed.Maximum = new decimal(new int[] {
             10,
             0,
@@ -218,7 +224,7 @@
 			// 
 			// StopButton
 			// 
-			this.StopButton.Location = new System.Drawing.Point(144, 146);
+			this.StopButton.Location = new System.Drawing.Point(142, 146);
 			this.StopButton.Name = "StopButton";
 			this.StopButton.Size = new System.Drawing.Size(75, 23);
 			this.StopButton.TabIndex = 9;
@@ -229,10 +235,10 @@
 			// ReversedBitsBox
 			// 
 			this.ReversedBitsBox.AutoSize = true;
-			this.ReversedBitsBox.Location = new System.Drawing.Point(438, 65);
+			this.ReversedBitsBox.Location = new System.Drawing.Point(549, 307);
 			this.ReversedBitsBox.Name = "ReversedBitsBox";
 			this.ReversedBitsBox.Size = new System.Drawing.Size(92, 17);
-			this.ReversedBitsBox.TabIndex = 22;
+			this.ReversedBitsBox.TabIndex = 32;
 			this.ReversedBitsBox.Text = "Reversed Bits";
 			this.ReversedBitsBox.UseVisualStyleBackColor = true;
 			this.ReversedBitsBox.CheckedChanged += new System.EventHandler(this.ReversedBitsBox_CheckedChanged);
@@ -245,7 +251,7 @@
             0,
             0,
             131072});
-			this.PID_P.Location = new System.Drawing.Point(14, 175);
+			this.PID_P.Location = new System.Drawing.Point(12, 175);
 			this.PID_P.Maximum = new decimal(new int[] {
             200,
             0,
@@ -274,7 +280,7 @@
             0,
             0,
             131072});
-			this.PID_I.Location = new System.Drawing.Point(14, 201);
+			this.PID_I.Location = new System.Drawing.Point(12, 201);
 			this.PID_I.Maximum = new decimal(new int[] {
             200,
             0,
@@ -303,7 +309,7 @@
             0,
             0,
             131072});
-			this.PID_D.Location = new System.Drawing.Point(14, 227);
+			this.PID_D.Location = new System.Drawing.Point(12, 227);
 			this.PID_D.Maximum = new decimal(new int[] {
             200,
             0,
@@ -321,7 +327,7 @@
 			// 
 			// textBox1
 			// 
-			this.textBox1.Location = new System.Drawing.Point(14, 12);
+			this.textBox1.Location = new System.Drawing.Point(12, 12);
 			this.textBox1.Name = "textBox1";
 			this.textBox1.ReadOnly = true;
 			this.textBox1.Size = new System.Drawing.Size(126, 20);
@@ -331,7 +337,7 @@
 			// 
 			// textBox2
 			// 
-			this.textBox2.Location = new System.Drawing.Point(225, 12);
+			this.textBox2.Location = new System.Drawing.Point(223, 12);
 			this.textBox2.Name = "textBox2";
 			this.textBox2.ReadOnly = true;
 			this.textBox2.Size = new System.Drawing.Size(126, 20);
@@ -346,7 +352,7 @@
             0,
             0,
             0});
-			this.RightByteSpeed.Location = new System.Drawing.Point(225, 64);
+			this.RightByteSpeed.Location = new System.Drawing.Point(223, 64);
 			this.RightByteSpeed.Maximum = new decimal(new int[] {
             255,
             0,
@@ -363,7 +369,7 @@
             0,
             0,
             0});
-			this.LeftByteSpeed.Location = new System.Drawing.Point(225, 38);
+			this.LeftByteSpeed.Location = new System.Drawing.Point(223, 38);
 			this.LeftByteSpeed.Maximum = new decimal(new int[] {
             255,
             0,
@@ -376,7 +382,7 @@
 			// ControllerEnableCheck
 			// 
 			this.ControllerEnableCheck.AutoSize = true;
-			this.ControllerEnableCheck.Location = new System.Drawing.Point(225, 150);
+			this.ControllerEnableCheck.Location = new System.Drawing.Point(223, 150);
 			this.ControllerEnableCheck.Name = "ControllerEnableCheck";
 			this.ControllerEnableCheck.Size = new System.Drawing.Size(112, 17);
 			this.ControllerEnableCheck.TabIndex = 14;
@@ -385,7 +391,7 @@
 			// 
 			// SendRightTreadByte
 			// 
-			this.SendRightTreadByte.Location = new System.Drawing.Point(357, 64);
+			this.SendRightTreadByte.Location = new System.Drawing.Point(355, 64);
 			this.SendRightTreadByte.Name = "SendRightTreadByte";
 			this.SendRightTreadByte.Size = new System.Drawing.Size(75, 20);
 			this.SendRightTreadByte.TabIndex = 20;
@@ -395,7 +401,7 @@
 			// 
 			// SendLeftTreadByte
 			// 
-			this.SendLeftTreadByte.Location = new System.Drawing.Point(357, 38);
+			this.SendLeftTreadByte.Location = new System.Drawing.Point(355, 38);
 			this.SendLeftTreadByte.Name = "SendLeftTreadByte";
 			this.SendLeftTreadByte.Size = new System.Drawing.Size(75, 20);
 			this.SendLeftTreadByte.TabIndex = 18;
@@ -406,7 +412,7 @@
 			// SpeedPID
 			// 
 			this.SpeedPID.AutoSize = true;
-			this.SpeedPID.Location = new System.Drawing.Point(225, 178);
+			this.SpeedPID.Location = new System.Drawing.Point(223, 178);
 			this.SpeedPID.Name = "SpeedPID";
 			this.SpeedPID.Size = new System.Drawing.Size(105, 17);
 			this.SpeedPID.TabIndex = 15;
@@ -416,7 +422,7 @@
 			// 
 			// textBox3
 			// 
-			this.textBox3.Location = new System.Drawing.Point(146, 175);
+			this.textBox3.Location = new System.Drawing.Point(144, 175);
 			this.textBox3.Name = "textBox3";
 			this.textBox3.ReadOnly = true;
 			this.textBox3.Size = new System.Drawing.Size(73, 20);
@@ -426,7 +432,7 @@
 			// 
 			// textBox4
 			// 
-			this.textBox4.Location = new System.Drawing.Point(146, 200);
+			this.textBox4.Location = new System.Drawing.Point(144, 200);
 			this.textBox4.Name = "textBox4";
 			this.textBox4.ReadOnly = true;
 			this.textBox4.Size = new System.Drawing.Size(73, 20);
@@ -436,7 +442,7 @@
 			// 
 			// textBox5
 			// 
-			this.textBox5.Location = new System.Drawing.Point(146, 226);
+			this.textBox5.Location = new System.Drawing.Point(144, 226);
 			this.textBox5.Name = "textBox5";
 			this.textBox5.ReadOnly = true;
 			this.textBox5.Size = new System.Drawing.Size(73, 20);
@@ -452,7 +458,7 @@
             0,
             0,
             65536});
-			this.Controller_Speed.Location = new System.Drawing.Point(14, 253);
+			this.Controller_Speed.Location = new System.Drawing.Point(12, 253);
 			this.Controller_Speed.Maximum = new decimal(new int[] {
             1,
             0,
@@ -475,7 +481,7 @@
 			// 
 			// textBox6
 			// 
-			this.textBox6.Location = new System.Drawing.Point(146, 253);
+			this.textBox6.Location = new System.Drawing.Point(144, 253);
 			this.textBox6.Name = "textBox6";
 			this.textBox6.ReadOnly = true;
 			this.textBox6.Size = new System.Drawing.Size(73, 20);
@@ -486,7 +492,7 @@
 			// PIDSlows
 			// 
 			this.PIDSlows.AutoSize = true;
-			this.PIDSlows.Location = new System.Drawing.Point(225, 204);
+			this.PIDSlows.Location = new System.Drawing.Point(223, 204);
 			this.PIDSlows.Name = "PIDSlows";
 			this.PIDSlows.Size = new System.Drawing.Size(99, 17);
 			this.PIDSlows.TabIndex = 16;
@@ -497,10 +503,10 @@
 			// SerialOpenBox
 			// 
 			this.SerialOpenBox.AutoSize = true;
-			this.SerialOpenBox.Location = new System.Drawing.Point(438, 39);
+			this.SerialOpenBox.Location = new System.Drawing.Point(549, 281);
 			this.SerialOpenBox.Name = "SerialOpenBox";
 			this.SerialOpenBox.Size = new System.Drawing.Size(92, 17);
-			this.SerialOpenBox.TabIndex = 21;
+			this.SerialOpenBox.TabIndex = 31;
 			this.SerialOpenBox.Text = "Is Serial Open";
 			this.SerialOpenBox.UseVisualStyleBackColor = true;
 			// 
@@ -668,11 +674,71 @@
 			this.textBox10.TabStop = false;
 			this.textBox10.Text = "Right Dead Zones";
 			// 
+			// RightSenseThresh
+			// 
+			this.RightSenseThresh.Location = new System.Drawing.Point(681, 142);
+			this.RightSenseThresh.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.RightSenseThresh.Name = "RightSenseThresh";
+			this.RightSenseThresh.Size = new System.Drawing.Size(126, 20);
+			this.RightSenseThresh.TabIndex = 30;
+			this.RightSenseThresh.Value = new decimal(new int[] {
+            240,
+            0,
+            0,
+            0});
+			this.RightSenseThresh.ValueChanged += new System.EventHandler(this.RightSenseThresh_ValueChanged);
+			// 
+			// textBox7
+			// 
+			this.textBox7.Location = new System.Drawing.Point(681, 116);
+			this.textBox7.Name = "textBox7";
+			this.textBox7.ReadOnly = true;
+			this.textBox7.Size = new System.Drawing.Size(126, 20);
+			this.textBox7.TabIndex = 41;
+			this.textBox7.TabStop = false;
+			this.textBox7.Text = "Right Sensor Threshold";
+			// 
+			// LeftSenseThresh
+			// 
+			this.LeftSenseThresh.Location = new System.Drawing.Point(549, 142);
+			this.LeftSenseThresh.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.LeftSenseThresh.Name = "LeftSenseThresh";
+			this.LeftSenseThresh.Size = new System.Drawing.Size(126, 20);
+			this.LeftSenseThresh.TabIndex = 29;
+			this.LeftSenseThresh.Value = new decimal(new int[] {
+            240,
+            0,
+            0,
+            0});
+			this.LeftSenseThresh.ValueChanged += new System.EventHandler(this.LeftSenseThresh_ValueChanged);
+			// 
+			// textBox8
+			// 
+			this.textBox8.Location = new System.Drawing.Point(549, 116);
+			this.textBox8.Name = "textBox8";
+			this.textBox8.ReadOnly = true;
+			this.textBox8.Size = new System.Drawing.Size(126, 20);
+			this.textBox8.TabIndex = 40;
+			this.textBox8.TabStop = false;
+			this.textBox8.Text = "Left Sensor Threshold";
+			// 
 			// MXEN300
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(866, 495);
+			this.Controls.Add(this.RightSenseThresh);
+			this.Controls.Add(this.textBox7);
+			this.Controls.Add(this.LeftSenseThresh);
+			this.Controls.Add(this.textBox8);
 			this.Controls.Add(this.RightDeadHigh);
 			this.Controls.Add(this.RightDeadZero);
 			this.Controls.Add(this.RightDeadLow);
@@ -727,6 +793,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.RightDeadHigh)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.RightDeadZero)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.RightDeadLow)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.RightSenseThresh)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.LeftSenseThresh)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -774,6 +842,10 @@
 		private System.Windows.Forms.NumericUpDown RightDeadZero;
 		private System.Windows.Forms.NumericUpDown RightDeadLow;
 		private System.Windows.Forms.TextBox textBox10;
+		private System.Windows.Forms.NumericUpDown RightSenseThresh;
+		private System.Windows.Forms.TextBox textBox7;
+		private System.Windows.Forms.NumericUpDown LeftSenseThresh;
+		private System.Windows.Forms.TextBox textBox8;
 	}
 }
 

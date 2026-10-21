@@ -18,7 +18,7 @@ namespace SerialGUISample.Hardware
 
 		private bool TryGetReadPortIndex(byte port, out byte index)
 		{
-			int indexInt = ReadPorts.GetIndex(port);
+			int indexInt = ReadPorts.IndexOf(port);
 			if (indexInt < 0 || indexInt > byte.MaxValue)
 			{
 				index = default;
@@ -162,7 +162,7 @@ namespace SerialGUISample.Hardware
 			Send(sendIndex, byteVal);
 		}
 
-		private readonly List<(byte readIndex, byte value)> updateBuffer = new List<(byte port, byte value)>();
+		private readonly List<(byte readIndex, byte value)> updateBuffer = new List<(byte readIndex, byte value)>();
 
 		private void OnSerialRecieve(object sender, SerialDataReceivedEventArgs e)
 		{

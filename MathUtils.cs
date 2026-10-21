@@ -11,7 +11,7 @@ namespace SerialGUISample
 		public const byte START = 255;
 		public const byte ZERO = 0;
 
-		public const float Vref = 15;
+		public const double Vref = 15;
 
 		public static double InvLerp(double t, double min, double max)
 		{
@@ -54,7 +54,7 @@ namespace SerialGUISample
 		public static byte ReverseBits(byte b)
 			=> (byte)(((b * 0x80200802ul) & 0x0884422110ul) * 0x0101010101ul >> 32);
 
-		public static int GetIndex<T>(this IEnumerable<T> enumerable, T find) where T : IEquatable<T>
+		public static int IndexOf<T>(this IEnumerable<T> enumerable, T find) where T : IEquatable<T>
 		{
 			int index = 0;
 			foreach (T item in enumerable)

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SerialGUISample
+﻿namespace SerialGUISample
 {
 	public enum LogLevel
 	{
@@ -13,7 +7,7 @@ namespace SerialGUISample
 		WARN,
 		ERROR,
 
-		REQUESTED,
+		GUI,
 	}
 
 	public delegate void LogDelegate(LogLevel level, string format, params object[] arg);
