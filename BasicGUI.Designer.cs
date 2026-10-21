@@ -73,6 +73,9 @@
 			this.textBox7 = new System.Windows.Forms.TextBox();
 			this.LeftSenseThresh = new System.Windows.Forms.NumericUpDown();
 			this.textBox8 = new System.Windows.Forms.TextBox();
+			this.SerialPort = new System.Windows.Forms.TextBox();
+			this.textBox12 = new System.Windows.Forms.TextBox();
+			this.DeadZoneCheck = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.LeftTreadSpeed)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.RightTreadSpeed)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.PID_P)).BeginInit();
@@ -235,7 +238,7 @@
 			// ReversedBitsBox
 			// 
 			this.ReversedBitsBox.AutoSize = true;
-			this.ReversedBitsBox.Location = new System.Drawing.Point(549, 307);
+			this.ReversedBitsBox.Location = new System.Drawing.Point(549, 329);
 			this.ReversedBitsBox.Name = "ReversedBitsBox";
 			this.ReversedBitsBox.Size = new System.Drawing.Size(92, 17);
 			this.ReversedBitsBox.TabIndex = 32;
@@ -503,7 +506,7 @@
 			// SerialOpenBox
 			// 
 			this.SerialOpenBox.AutoSize = true;
-			this.SerialOpenBox.Location = new System.Drawing.Point(549, 281);
+			this.SerialOpenBox.Location = new System.Drawing.Point(549, 303);
 			this.SerialOpenBox.Name = "SerialOpenBox";
 			this.SerialOpenBox.Size = new System.Drawing.Size(92, 17);
 			this.SerialOpenBox.TabIndex = 31;
@@ -730,11 +733,43 @@
 			this.textBox8.TabStop = false;
 			this.textBox8.Text = "Left Sensor Threshold";
 			// 
+			// SerialPort
+			// 
+			this.SerialPort.Location = new System.Drawing.Point(549, 194);
+			this.SerialPort.Name = "SerialPort";
+			this.SerialPort.Size = new System.Drawing.Size(126, 20);
+			this.SerialPort.TabIndex = 42;
+			this.SerialPort.TextChanged += new System.EventHandler(this.SerialPort_TextChanged);
+			// 
+			// textBox12
+			// 
+			this.textBox12.Location = new System.Drawing.Point(681, 194);
+			this.textBox12.Name = "textBox12";
+			this.textBox12.ReadOnly = true;
+			this.textBox12.Size = new System.Drawing.Size(126, 20);
+			this.textBox12.TabIndex = 43;
+			this.textBox12.TabStop = false;
+			this.textBox12.Text = "Serial Port";
+			// 
+			// DeadZoneCheck
+			// 
+			this.DeadZoneCheck.AutoSize = true;
+			this.DeadZoneCheck.Location = new System.Drawing.Point(436, 12);
+			this.DeadZoneCheck.Name = "DeadZoneCheck";
+			this.DeadZoneCheck.Size = new System.Drawing.Size(107, 17);
+			this.DeadZoneCheck.TabIndex = 44;
+			this.DeadZoneCheck.Text = "Use Dead Zones";
+			this.DeadZoneCheck.UseVisualStyleBackColor = true;
+			this.DeadZoneCheck.CheckedChanged += new System.EventHandler(this.DeadZoneCheck_CheckedChanged);
+			// 
 			// MXEN300
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(866, 495);
+			this.Controls.Add(this.DeadZoneCheck);
+			this.Controls.Add(this.textBox12);
+			this.Controls.Add(this.SerialPort);
 			this.Controls.Add(this.RightSenseThresh);
 			this.Controls.Add(this.textBox7);
 			this.Controls.Add(this.LeftSenseThresh);
@@ -846,6 +881,9 @@
 		private System.Windows.Forms.TextBox textBox7;
 		private System.Windows.Forms.NumericUpDown LeftSenseThresh;
 		private System.Windows.Forms.TextBox textBox8;
+		private System.Windows.Forms.TextBox SerialPort;
+		private System.Windows.Forms.TextBox textBox12;
+		private System.Windows.Forms.CheckBox DeadZoneCheck;
 	}
 }
 

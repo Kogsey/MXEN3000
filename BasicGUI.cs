@@ -37,6 +37,10 @@ namespace SerialGUISample
 			ReversedBitsBox_CheckedChanged(null, null);
 			LeftSenseThresh_ValueChanged(null, null);
 			RightSenseThresh_ValueChanged(null, null);
+			DeadZoneCheck_CheckedChanged(null, null);
+			SerialPort.Text = serial.PortName;
+
+			KeyPress += KeyPressHandler;
 		}
 
 		private readonly List<string> statusBoxUpdate = new List<string>();
@@ -127,7 +131,7 @@ namespace SerialGUISample
 			}
 		}
 
-		#region IO
+		#region GUI
 
 		private void SendLeftTread_Click(object sender, EventArgs e)
 		{
@@ -231,8 +235,6 @@ namespace SerialGUISample
 			Log(LogLevel.GUI, "Updated right dead zones: {0}", controller.RightDeadZones);
 		}
 
-		#endregion IO
-
 		private void RightSenseThresh_ValueChanged(object sender, EventArgs e)
 		{
 			controller.RightSense.TrigHigh = controller.RightSense.TrigLow = (byte)RightSenseThresh.Value;
@@ -243,6 +245,40 @@ namespace SerialGUISample
 		{
 			controller.LeftSense.TrigHigh = controller.LeftSense.TrigLow = (byte)LeftSenseThresh.Value;
 			Log(LogLevel.GUI, "Updated left sensor threshold: {0}", controller.LeftSense.TrigHigh);
+		}
+
+		private void DeadZoneCheck_CheckedChanged(object sender, EventArgs e)
+		{
+			controller.UseDeadZones = DeadZoneCheck.Checked;
+			Log(LogLevel.GUI, "Updated dead zone usage: {0}", controller.UseDeadZones);
+		}
+
+		#endregion GUI
+
+		private void ToggleControl()
+		{
+			if (ControllerEnabled)
+				StopButton_Click(null, null);
+			else
+				StartButton_Click(null, null);
+		}
+
+		private void KeyPressHandler(object sender, KeyPressEventArgs e)
+		{
+			switch (e.KeyChar)
+			{
+				case 's':
+					ToggleControl();
+					break;
+			}
+		}
+
+		private void SerialPort_TextChanged(object sender, EventArgs e)
+		{
+			if (commsUtil.SerialOpen)
+				serial.Close();
+
+			serial.PortName = SerialPort.Text;
 		}
 	}
 }
