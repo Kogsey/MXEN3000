@@ -1,5 +1,6 @@
 ﻿using SerialGUISample.Hardware;
 using System;
+using System.Drawing.Text;
 
 namespace SerialGUISample
 {
@@ -21,9 +22,10 @@ namespace SerialGUISample
 		public bool PIDUsesSpeed;
 		public bool PIDOnlySlows;
 		public double CurrentError;
-		public double timeMultiplier = 0.01f;
+		public double timeMultiplier = 0.001;
 		public double BaseSpeed = 0;
-		public double MaxPIDAdjust = 0.5f;
+		public double MaxPIDAdjust => BaseSpeed;
+		public double MaxError = 1;
 
 		private DateTime lastTimeUpdate = DateTime.Now;
 		private readonly int discardMaxMillis = 200;
@@ -32,6 +34,7 @@ namespace SerialGUISample
 		{
 			base.SetStarted();
 			lastTimeUpdate = DateTime.Now;
+			CurrentError = 0;
 		}
 
 		public override void Update()
@@ -40,39 +43,63 @@ namespace SerialGUISample
 			LeftSense.Update();
 			RightSense.Update();
 
-			bool leftOn = LeftSense.IsHigh;
-			bool rightOn = RightSense.IsHigh;
+			bool leftHigh = LeftSense.IsHigh;
+			bool rightHigh = RightSense.IsHigh;
 			DateTime now = DateTime.Now;
 			TimeSpan diff = now - lastTimeUpdate;
 			//lastTimeUpdate = now;
 
-			if (diff.Milliseconds > discardMaxMillis)
-				return;
+			//if (diff.Milliseconds > discardMaxMillis)
+			//	return;
 
-			if (lastTimeUpdate == null)
-				lastTimeUpdate = DateTime.Now;
-
-			if (leftOn && !rightOn)
-				CurrentError -= timeMultiplier * diff.Seconds;
-			if (!leftOn && rightOn)
-				CurrentError += timeMultiplier * diff.Seconds;
-			else
-				lastTimeUpdate = now;
-
-			double pid = PIDUsesSpeed ? PID.CalcPID(CurrentError, BaseSpeed) : PID.CalcPID(CurrentError);
-			pid = MathUtils.Clamp(pid, -MaxPIDAdjust, MaxPIDAdjust);
-
-			double left = BaseSpeed - pid;
-			double right = BaseSpeed + pid;
-			if (PIDOnlySlows)
+			bool BANGBANG = true;
+			double slowSpeed = 0;
+			if (BANGBANG)
 			{
-				if (left > BaseSpeed)
-					left = BaseSpeed;
-				if (right > BaseSpeed)
-					right = BaseSpeed;
+				if (leftHigh && !rightHigh)
+					SetTreads(slowSpeed, BaseSpeed);
+				if (!leftHigh && rightHigh)
+					SetTreads(BaseSpeed, slowSpeed);
+				if (!leftHigh && !rightHigh)
+					SetTreads(0, 0);
+				else
+					SetTreads(BaseSpeed, BaseSpeed);
 			}
+			else
+			{
+				if (leftHigh && !rightHigh)
+					CurrentError -= timeMultiplier * diff.TotalMilliseconds;
+				if (!leftHigh && rightHigh)
+					CurrentError += timeMultiplier * diff.TotalMilliseconds;
+				if (!leftHigh && !rightHigh)
+				{
+					SetTreads(0, 0);
+					lastTimeUpdate = now;
+					return;
+				}
+				else
+				{
+					CurrentError = 0;
+					lastTimeUpdate = now;
+				}
 
-			SetTreads(left, right);
+				CurrentError = MathUtils.Clamp(CurrentError, -MaxError, MaxError);
+
+				double pid = PIDUsesSpeed ? PID.CalcPID(CurrentError, BaseSpeed) : PID.CalcPID(CurrentError);
+				pid = MathUtils.Clamp(pid, -MaxPIDAdjust, MaxPIDAdjust);
+
+				double left = BaseSpeed - pid;
+				double right = BaseSpeed + pid;
+				if (PIDOnlySlows)
+				{
+					if (left > BaseSpeed)
+						left = BaseSpeed;
+					if (right > BaseSpeed)
+						right = BaseSpeed;
+				}
+
+				SetTreads(left, right);
+			}
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
@@ -61,12 +62,10 @@ namespace SerialGUISample.Hardware
 			if (!Serial.IsOpen && RunSerial)
 				TryStartSerial(logFailure: false);
 
-			lock (updateBuffer)
+			while (updateBuffer.TryDequeue(out (byte readIndex, byte value) val))
 			{
-				foreach ((byte readIndex, byte value) in updateBuffer)
-				{
-					OnSerialRead(readIndex, value);
-				}
+				(byte readIndex, byte value) = val;
+				OnSerialRead(readIndex, value);
 			}
 		}
 
@@ -132,8 +131,8 @@ namespace SerialGUISample.Hardware
 		//private const double RAMP_MIN = 0;
 		private const double RAMP_MIN = 2.76;
 
-		//private const double RAMP_MAX = 15;
-		private const double RAMP_MAX = 12;
+		private const double RAMP_MAX = 15;
+		//private const double RAMP_MAX = 12;
 
 		private static double DutyByteMin => MathUtils.AmpVoltToByte(RAMP_MIN);
 		private static double DutyByteMax => MathUtils.AmpVoltToByte(RAMP_MAX);
@@ -162,7 +161,7 @@ namespace SerialGUISample.Hardware
 			Send(sendIndex, byteVal);
 		}
 
-		private readonly List<(byte readIndex, byte value)> updateBuffer = new List<(byte readIndex, byte value)>();
+		private readonly ConcurrentQueue<(byte readIndex, byte value)> updateBuffer = new ConcurrentQueue<(byte readIndex, byte value)>();
 
 		private void OnSerialRecieve(object sender, SerialDataReceivedEventArgs e)
 		{
@@ -177,10 +176,7 @@ namespace SerialGUISample.Hardware
 				{
 					(byte port, byte value) = read.Value;
 					SetReadByPort(port, value, out byte index);
-					lock (updateBuffer)
-					{
-						updateBuffer.Add((index, value));
-					}
+					updateBuffer.Enqueue((index, value));
 				}
 			}
 		}

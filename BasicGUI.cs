@@ -23,7 +23,7 @@ namespace SerialGUISample
 			commsUtil.OnSerialRead += UpdateReadBoxes;
 
 			controller = new LineFollowController(commsUtil, Log);
-			controller.OnTreadSpeedChanged += UpdateTread;
+			//controller.OnTreadSpeedChanged += UpdateTread;
 
 			PID_P_ValueChanged(null, null);
 			PID_I_ValueChanged(null, null);
@@ -47,6 +47,7 @@ namespace SerialGUISample
 
 		private void Log(LogLevel level, string msg, params object[] arg)
 		{
+			return;
 			if (level >= LOG_LEVEL)
 			{
 				string formatMsg = string.Format(msg, arg);
@@ -63,9 +64,9 @@ namespace SerialGUISample
 		private void UpdateReadBoxes(byte readIndex, byte readByte)
 		{
 			TextBox box = null;
-			if (readIndex == 0)
+			if (readIndex == controller.LeftSense.ReadIndex)
 				box = SensorReadLeft;
-			if (readIndex == 1)
+			if (readIndex == controller.RightSense.ReadIndex)
 				box = SensorReadRight;
 
 			if (box != null)
@@ -83,9 +84,9 @@ namespace SerialGUISample
 		private void UpdateTread(byte sendIndex, double treadSpeed)
 		{
 			NumericUpDown box = null;
-			if (sendIndex == 0)
+			if (sendIndex == controller.LeftSend)
 				box = LeftTreadSpeed;
-			if (sendIndex == 1)
+			if (sendIndex == controller.RightSend)
 				box = RightTreadSpeed;
 
 			if (box != null)
@@ -122,6 +123,7 @@ namespace SerialGUISample
 
 		private void UpdateUI()
 		{
+			Debug.Text = controller.CurrentError.ToString();
 			SerialOpenBox.Checked = commsUtil.SerialOpen;
 
 			for (byte i = 0; i < 2; i++)
@@ -147,13 +149,13 @@ namespace SerialGUISample
 
 		private void SendLeftTreadByte_Click(object sender, EventArgs e)
 		{
-			commsUtil.Send(0, (byte)LeftByteSpeed.Value);
+			commsUtil.Send(controller.LeftSend, (byte)LeftByteSpeed.Value);
 			Log(LogLevel.GUI, "Sent left tread byte: {0}", (byte)LeftByteSpeed.Value);
 		}
 
 		private void SendRightTreadByte_Click(object sender, EventArgs e)
 		{
-			commsUtil.Send(1, (byte)RightByteSpeed.Value);
+			commsUtil.Send(controller.RightSend, (byte)RightByteSpeed.Value);
 			Log(LogLevel.GUI, "Sent right tread byte: {0}", (byte)RightByteSpeed.Value);
 		}
 
@@ -235,16 +237,16 @@ namespace SerialGUISample
 			Log(LogLevel.GUI, "Updated right dead zones: {0}", controller.RightDeadZones);
 		}
 
-		private void RightSenseThresh_ValueChanged(object sender, EventArgs e)
-		{
-			controller.RightSense.TrigHigh = controller.RightSense.TrigLow = (byte)RightSenseThresh.Value;
-			Log(LogLevel.GUI, "Updated right sensor threshold: {0}", controller.RightSense.TrigHigh);
-		}
-
 		private void LeftSenseThresh_ValueChanged(object sender, EventArgs e)
 		{
-			controller.LeftSense.TrigHigh = controller.LeftSense.TrigLow = (byte)LeftSenseThresh.Value;
-			Log(LogLevel.GUI, "Updated left sensor threshold: {0}", controller.LeftSense.TrigHigh);
+			controller.LeftSense.Trig = (byte)LeftSenseThresh.Value;
+			Log(LogLevel.GUI, "Updated left sensor threshold: {0}", controller.LeftSense.Trig);
+		}
+
+		private void RightSenseThresh_ValueChanged(object sender, EventArgs e)
+		{
+			controller.RightSense.Trig = (byte)RightSenseThresh.Value;
+			Log(LogLevel.GUI, "Updated right sensor threshold: {0}", controller.RightSense.Trig);
 		}
 
 		private void DeadZoneCheck_CheckedChanged(object sender, EventArgs e)

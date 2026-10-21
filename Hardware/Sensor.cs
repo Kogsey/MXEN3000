@@ -7,8 +7,8 @@ namespace SerialGUISample.Hardware
 		private readonly BoardComms Comms;
 		private readonly LogDelegate Log;
 
-		public byte TrigHigh { get; set; } = 240;
-		public byte TrigLow { get; set; } = 240;
+		public byte Trig { get; set; } = 240;
+		//public byte TrigLow { get; set; } = 240;
 
 		public bool IsHigh { get; private set; }
 
@@ -24,7 +24,7 @@ namespace SerialGUISample.Hardware
 			Log = log;
 			ReadIndex = readIndex;
 			Comms = comms;
-			Comms.OnSerialRead += UpdateMe;
+			//Comms.OnSerialRead += UpdateMe;
 		}
 
 		public void Update()
@@ -34,7 +34,7 @@ namespace SerialGUISample.Hardware
 			Comms.RequestRead(ReadIndex);
 
 			if (BoardComms.recievedData[ReadIndex].HasValue)
-				UpdateMe(Comms.ReadPorts[ReadIndex], BoardComms.recievedData[ReadIndex].Value);
+				UpdateMe(ReadIndex, BoardComms.recievedData[ReadIndex].Value);
 		}
 
 		private void RequestTimer()
@@ -65,21 +65,13 @@ namespace SerialGUISample.Hardware
 
 		public void TriggerCheck(byte value)
 		{
-			//Log(LogLevel.VERBOSE, "Sensor {0} parsing: {1}", this, value);
-			if (value < TrigLow && IsHigh)
-			{
+			if (value < Trig)
 				IsHigh = false;
-				//Log(LogLevel.VERBOSE, "Sensor state changed to: {0}", IsOn);
-			}
-
-			if (value >= TrigHigh && !IsHigh)
-			{
+			if (value > Trig)
 				IsHigh = true;
-				//Log(LogLevel.VERBOSE, "Sensor state changed to: {0}", IsOn);
-			}
 		}
 
 		public override string ToString()
-			=> string.Format("{{ On: {0}, Off: {1}, IsTrig: {2} }}", TrigHigh, TrigLow, IsHigh);
+			=> string.Format("{{ On: {0}, Off: {1}, IsTrig: {2} }}", Trig, IsHigh);
 	}
 }

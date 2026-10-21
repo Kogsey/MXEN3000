@@ -7,8 +7,8 @@ namespace SerialGUISample
 	{
 		protected BoardComms CommsUtil { get; }
 		protected LogDelegate Log { get; }
-		private byte LeftSend => 0;
-		private byte RightSend => 1;
+		public byte LeftSend => 1;
+		public byte RightSend => 0;
 
 		public bool UseDeadZones { get; set; }
 		private static readonly (double low, double zero, double high) DEAD_DEFAULT = (0, 0, 0);

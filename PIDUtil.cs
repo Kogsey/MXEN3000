@@ -22,6 +22,9 @@ namespace SerialGUISample
 		{
 			P = error;
 			I = I + error;
+			if (I > 1)
+				I = 1;
+
 			D = error - LastError;
 
 			double result = (Kp * P + Ki * I + Kd * D) * speedMult;

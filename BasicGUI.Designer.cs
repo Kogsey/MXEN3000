@@ -76,6 +76,7 @@
 			this.SerialPort = new System.Windows.Forms.TextBox();
 			this.textBox12 = new System.Windows.Forms.TextBox();
 			this.DeadZoneCheck = new System.Windows.Forms.CheckBox();
+			this.Debug = new System.Windows.Forms.TextBox();
 			((System.ComponentModel.ISupportInitialize)(this.LeftTreadSpeed)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.RightTreadSpeed)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.PID_P)).BeginInit();
@@ -238,6 +239,8 @@
 			// ReversedBitsBox
 			// 
 			this.ReversedBitsBox.AutoSize = true;
+			this.ReversedBitsBox.Checked = true;
+			this.ReversedBitsBox.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.ReversedBitsBox.Location = new System.Drawing.Point(549, 329);
 			this.ReversedBitsBox.Name = "ReversedBitsBox";
 			this.ReversedBitsBox.Size = new System.Drawing.Size(92, 17);
@@ -269,10 +272,10 @@
 			this.PID_P.Size = new System.Drawing.Size(126, 20);
 			this.PID_P.TabIndex = 10;
 			this.PID_P.Value = new decimal(new int[] {
-            25,
+            21,
             0,
             0,
-            131072});
+            65536});
 			this.PID_P.ValueChanged += new System.EventHandler(this.PID_P_ValueChanged);
 			// 
 			// PID_I
@@ -298,10 +301,10 @@
 			this.PID_I.Size = new System.Drawing.Size(126, 20);
 			this.PID_I.TabIndex = 11;
 			this.PID_I.Value = new decimal(new int[] {
-            4,
+            1,
             0,
             0,
-            65536});
+            131072});
 			this.PID_I.ValueChanged += new System.EventHandler(this.PID_I_ValueChanged);
 			// 
 			// PID_D
@@ -495,6 +498,8 @@
 			// PIDSlows
 			// 
 			this.PIDSlows.AutoSize = true;
+			this.PIDSlows.Checked = true;
+			this.PIDSlows.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.PIDSlows.Location = new System.Drawing.Point(223, 204);
 			this.PIDSlows.Name = "PIDSlows";
 			this.PIDSlows.Size = new System.Drawing.Size(99, 17);
@@ -545,6 +550,11 @@
 			this.LeftDeadLow.Name = "LeftDeadLow";
 			this.LeftDeadLow.Size = new System.Drawing.Size(126, 20);
 			this.LeftDeadLow.TabIndex = 23;
+			this.LeftDeadLow.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147418112});
 			this.LeftDeadLow.ValueChanged += new System.EventHandler(this.LeftDeadZones_ValueChanged);
 			// 
 			// LeftDeadZero
@@ -593,6 +603,11 @@
 			this.LeftDeadHigh.Name = "LeftDeadHigh";
 			this.LeftDeadHigh.Size = new System.Drawing.Size(126, 20);
 			this.LeftDeadHigh.TabIndex = 27;
+			this.LeftDeadHigh.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
 			this.LeftDeadHigh.ValueChanged += new System.EventHandler(this.LeftDeadZones_ValueChanged);
 			// 
 			// RightDeadHigh
@@ -617,6 +632,11 @@
 			this.RightDeadHigh.Name = "RightDeadHigh";
 			this.RightDeadHigh.Size = new System.Drawing.Size(126, 20);
 			this.RightDeadHigh.TabIndex = 28;
+			this.RightDeadHigh.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
 			this.RightDeadHigh.ValueChanged += new System.EventHandler(this.RightDeadZones_ValueChanged);
 			// 
 			// RightDeadZero
@@ -665,6 +685,11 @@
 			this.RightDeadLow.Name = "RightDeadLow";
 			this.RightDeadLow.Size = new System.Drawing.Size(126, 20);
 			this.RightDeadLow.TabIndex = 24;
+			this.RightDeadLow.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147418112});
 			this.RightDeadLow.ValueChanged += new System.EventHandler(this.RightDeadZones_ValueChanged);
 			// 
 			// textBox10
@@ -689,7 +714,7 @@
 			this.RightSenseThresh.Size = new System.Drawing.Size(126, 20);
 			this.RightSenseThresh.TabIndex = 30;
 			this.RightSenseThresh.Value = new decimal(new int[] {
-            240,
+            235,
             0,
             0,
             0});
@@ -717,7 +742,7 @@
 			this.LeftSenseThresh.Size = new System.Drawing.Size(126, 20);
 			this.LeftSenseThresh.TabIndex = 29;
 			this.LeftSenseThresh.Value = new decimal(new int[] {
-            240,
+            235,
             0,
             0,
             0});
@@ -754,6 +779,8 @@
 			// DeadZoneCheck
 			// 
 			this.DeadZoneCheck.AutoSize = true;
+			this.DeadZoneCheck.Checked = true;
+			this.DeadZoneCheck.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.DeadZoneCheck.Location = new System.Drawing.Point(436, 12);
 			this.DeadZoneCheck.Name = "DeadZoneCheck";
 			this.DeadZoneCheck.Size = new System.Drawing.Size(107, 17);
@@ -762,11 +789,19 @@
 			this.DeadZoneCheck.UseVisualStyleBackColor = true;
 			this.DeadZoneCheck.CheckedChanged += new System.EventHandler(this.DeadZoneCheck_CheckedChanged);
 			// 
+			// Debug
+			// 
+			this.Debug.Location = new System.Drawing.Point(355, 204);
+			this.Debug.Name = "Debug";
+			this.Debug.Size = new System.Drawing.Size(126, 20);
+			this.Debug.TabIndex = 45;
+			// 
 			// MXEN300
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(866, 495);
+			this.Controls.Add(this.Debug);
 			this.Controls.Add(this.DeadZoneCheck);
 			this.Controls.Add(this.textBox12);
 			this.Controls.Add(this.SerialPort);
@@ -884,6 +919,7 @@
 		private System.Windows.Forms.TextBox SerialPort;
 		private System.Windows.Forms.TextBox textBox12;
 		private System.Windows.Forms.CheckBox DeadZoneCheck;
+		private System.Windows.Forms.TextBox Debug;
 	}
 }
 
